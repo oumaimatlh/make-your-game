@@ -1,0 +1,38 @@
+   .container {
+        width: 90%;
+        margin: 0 auto;
+    }
+
+    svg {
+        display: block;
+        margin: 0 auto;
+        width: 80%;
+        height: auto;
+    }
+
+    /* Tablette */
+    @media (max-width: 1024px) {
+        svg {
+            width: 90%;
+        }
+    }
+
+    @media (min-width: 1025px) {
+        svg {
+            width: 50%;
+        }
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+        svg {
+            width: 75%;
+        }
+    }
+
+    /* Petit mobile */
+    @media (max-width: 480px) {
+        svg {
+            width: 80%;
+        }
+    }
