@@ -1,51 +1,53 @@
-const walls = [];
-document.querySelectorAll(".maze").forEach(path => {
-    walls.push(path.getBBox());
-})
+//Laby => grille 
+const grid = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 
+    [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1], 
+    [1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1], 
+    [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1], 
+    [1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1],
+    [1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1], 
+    [1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1], 
+    [1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1], 
+    [1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1],  
+    [1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1], 
+    [1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1], 
+    [1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1], 
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0], 
+    [1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1], 
+    [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1], 
+    [1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1], 
+    [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1], 
+    [1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1], 
+    [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1],  
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+]
+console.log("test")
+const maze = document.createElement('div')
+maze.setAttribute('class', 'maze')
 
-const pacMan = document.getElementById('PacMan')
-
-const pacWidth = parseFloat(pacMan.getAttribute('width'))
-const pacHeight = parseFloat(pacMan.getAttribute('height'))
-
-const SVG_WIDTH = 1132
-const SVG_HEIGHT = 1144
-
-const STEP = 20;
-
-let positionPacMan = {
-    x: parseFloat(pacMan.getAttribute('x')),
-    y: parseFloat(pacMan.getAttribute('y'))
-};
-
-function clamp(value, min, max) {
-    return Math.min(Math.max(value, min), max);
-}
-
-function movePacMan(dx, dy) {
-    const newX = clamp(positionPacMan.x + dx, 0, SVG_WIDTH - pacWidth);
-    const newY = clamp(positionPacMan.y + dy, 0, SVG_HEIGHT - pacHeight);
-    positionPacMan.x = newX;
-    positionPacMan.y = newY;
-    pacMan.setAttribute('x', positionPacMan.x);
-    pacMan.setAttribute('y', positionPacMan.y);
-}
+const table = document.createElement('table')
 
 
-document.addEventListener('keydown', (event) => {
-    switch (event.key) {
-        case 'ArrowRight':
-            movePacMan(STEP, 0);
-            break;
-        case 'ArrowLeft':
-            movePacMan(-STEP, 0);
-            break;
-        case 'ArrowUp':
-            movePacMan(0, -STEP);
-            break;
-        case 'ArrowDown':
-            movePacMan(0, STEP);
-            break;
-    }
+grid.forEach((row) => {
+    const tr = document.createElement('tr');
+
+    row.forEach((col) => {
+        const td = document.createElement('td');
+
+        if (col === 1) {
+            td.classList.add('wall');
+        } else {
+            td.classList.add('path');
+        }
+
+        tr.append(td);
+    });
+
+    table.append(tr);
 });
+document.body.append(maze)
 
+maze.append(table)
+
+document.body.append(maze)
+console.log(grille.length)
