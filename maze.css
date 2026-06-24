@@ -1,21 +1,83 @@
+body {
+    margin: 0;
+    padding: 20px;
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+}
+
+.maze-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
 table {
     border-collapse: collapse;
+    background: transparent;
+    box-shadow: 0 0 30px rgba(0, 170, 255, 0.6);
 }
 
 td {
-    width: 40px;
-    height: 30px;
+    width: 32px;           /* ← on rend les cellules carrées */
+    height: 32px;
+    position: relative;
+    box-sizing: border-box;
+    vertical-align: middle;
+}
+:root {
+    --cell-size: 32px;
 }
 
+td {
+    width: var(--cell-size);
+    height: var(--cell-size);
+}
+/* === Murs & Chemins === */
 .wall {
-    background: blue;
-    border: 1px black solid ;
+    background: #100a35;
+    border: 3px solid #00aaff;        /* bordure plus visible */
+    box-shadow: inset 0 0 8px rgba(0, 170, 255, 0.3);
 }
 
 .path {
-    width: 50px;
-    height: 50px;
-    background: rgb(255, 255, 255);
-    border: 1px black solid ;
+    background: #070606;
+    width: 200px;
+    /* Petit espace visuel autour du chemin */
+    box-shadow: inset 0 0 0 2px #1a1a1a;
+}
 
+/* === Pac-Man & Ghosts === */
+/* === Pac-Man & Ghosts - Plus gros === */
+.pacman-container,
+.ghosts-container {
+    padding: 0;                    /* Plus de padding */
+}
+
+.pacman-container img,
+.ghosts-container img {
+    width: 100%;
+    height: 100%;
+inset: -2px;   /* permet de dépasser légèrement si besoin */
+    padding: 0;}
+/* Responsive */
+@media (max-width: 1200px) {
+    td { width: 28px; height: 28px; }
+}
+
+@media (max-width: 900px) {
+    td { width: 24px; height: 24px; }
+}
+
+@media (max-width: 600px) {
+    td { width: 20px; height: 20px; }
+}
+
+@media (max-width: 400px) {
+    td { width: 16px; height: 16px; }
 }
