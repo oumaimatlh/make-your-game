@@ -17,67 +17,81 @@ body {
     box-sizing: border-box;
 }
 
+:root {
+    --cell-size: 32px;
+}
+
 table {
     border-collapse: collapse;
     background: transparent;
     box-shadow: 0 0 30px rgba(0, 170, 255, 0.6);
-}
-
-td {
-    width: 32px;           /* ← on rend les cellules carrées */
-    height: 32px;
-    position: relative;
-    box-sizing: border-box;
-    vertical-align: middle;
-}
-:root {
-    --cell-size: 32px;
+    table-layout: fixed;
 }
 
 td {
     width: var(--cell-size);
     height: var(--cell-size);
+    max-width: var(--cell-size);
+    max-height: var(--cell-size);
+    position: relative;
+    box-sizing: border-box;
+    vertical-align: middle;
+    overflow: hidden;
 }
-/* === Murs & Chemins === */
+
 .wall {
     background: #100a35;
-    border: 3px solid #00aaff;        /* bordure plus visible */
+    border: 3px solid #00aaff;
     box-shadow: inset 0 0 8px rgba(0, 170, 255, 0.3);
 }
 
 .path {
     background: #070606;
-    width: 200px;
-    /* Petit espace visuel autour du chemin */
     box-shadow: inset 0 0 0 2px #1a1a1a;
 }
 
-/* === Pac-Man & Ghosts === */
-/* === Pac-Man & Ghosts - Plus gros === */
-.pacman-container,
+#pacman-container,
 .ghosts-container {
-    padding: 0;                    /* Plus de padding */
-}
-
-.pacman-container img,
-.ghosts-container img {
     width: 100%;
     height: 100%;
-inset: -2px;   /* permet de dépasser légèrement si besoin */
-    padding: 0;}
-/* Responsive */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+#pacman-container img,
+.ghosts-container img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 0;
+}
+
+.pac-dot {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pac-dot svg {
+    width: 35%;
+    height: 35%;
+    display: block;
+}
+
 @media (max-width: 1200px) {
-    td { width: 28px; height: 28px; }
+    :root { --cell-size: 28px; }
 }
-
 @media (max-width: 900px) {
-    td { width: 24px; height: 24px; }
+    :root { --cell-size: 24px; }
 }
-
 @media (max-width: 600px) {
-    td { width: 20px; height: 20px; }
+    :root { --cell-size: 20px; }
 }
-
 @media (max-width: 400px) {
-    td { width: 16px; height: 16px; }
+    :root { --cell-size: 16px; }
 }
