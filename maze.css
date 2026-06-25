@@ -1,14 +1,62 @@
 body {
     margin: 0;
-    padding: 20px;
     background: #000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     min-height: 100vh;
     font-family: Arial, sans-serif;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#game-header {
+    width: 736px; /* 23 colonnes × 32px */
+    margin: 20px 0;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    color: white;
 }
 
+.score-container,
+.high-score-container,
+.controls-container {
+    flex: 1;
+}
+
+.score-container {
+    font-size: 40px;
+    font-weight: bold;
+    text-align: left;
+}
+
+.high-score-container {
+    text-align: center;
+}
+
+.high-score-container div {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.high-score-container span {
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.controls-container {
+    text-align: right;
+}
+
+.controls-container button {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 32px;
+    cursor: pointer;
+    margin-left: 15px;
+}
 .maze-container {
     display: flex;
     justify-content: center;
