@@ -1,5 +1,7 @@
-// Architecture : Pac Man 
+// Architecture :THE MAZE PAC MAN 
+
 //Murs (walls) && PacMan && Paths &&& Dots && Fantomes(ghosts)
+
 export const maze = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 6, 6, 6, 1, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 1, 6, 6, 6, 1],
