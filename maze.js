@@ -44,15 +44,15 @@ maze.forEach(row => {
             td.classList.add('path');
             const pacContainer = document.createElement('div');
             td.id = 'pacman-container';
-            pacContainer.innerHTML = `<img src="./jeu.png" alt="Pac-Man">`;
+            pacContainer.innerHTML = `<img src="jeu.png" alt="Pac-Man">`;
             td.appendChild(pacContainer);
         }
         else if (cell === 3 || cell === 4 || cell === 5) {
             td.classList.add('path', 'ghost-cell');
             const ghost = document.createElement('div');
             ghost.className = 'ghosts-container';
-            const imgSrc = cell === 3 ? './jeu (3).png' :
-                cell === 4 ? './jeu (4).png' : './jeu (5).png';
+            const imgSrc = cell === 3 ? './assets/jeu (3).png' :
+                cell === 4 ? './assets/jeu (4).png' : './assets/jeu (5).png';
             ghost.innerHTML = `<img src="${imgSrc}" alt="Ghost">`;
             td.appendChild(ghost);
         }
