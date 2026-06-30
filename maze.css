@@ -1,122 +1,65 @@
+:root {
+    --cell-size: 40px; /* Taille de base ajustable */
+    --wall-color: #100a35;
+    --border-color: #00aaff;
+    --path-color: #070606;
+}
+
 body {
     margin: 0;
     background: #000;
     min-height: 100vh;
-    font-family: Arial, sans-serif;
-
+    font-family: 'Arial', sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-#game-header {
-    width: 736px; /* 23 colonnes × 32px */
-    margin: 20px 0;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
     color: white;
 }
 
-.score-container,
-.high-score-container,
-.controls-container {
-    flex: 1;
-}
-
-.score-container {
-    font-size: 40px;
-    font-weight: bold;
-    text-align: left;
-}
-
-.high-score-container {
-    text-align: center;
-}
-
-.high-score-container div {
-    font-size: 24px;
-    font-weight: bold;
-}
-
-.high-score-container span {
-    font-size: 40px;
-    font-weight: bold;
-}
-
-.controls-container {
-    text-align: right;
-}
-
-.controls-container button {
-    background: transparent;
-    border: none;
-    color: white;
-    font-size: 32px;
-    cursor: pointer;
-    margin-left: 15px;
-}
-.maze-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
-    box-sizing: border-box;
-}
-
-:root {
-    --cell-size: 32px;
-}
-
+/* Grille du labyrinthe */
 table {
     border-collapse: collapse;
     background: transparent;
-    box-shadow: 0 0 30px rgba(0, 170, 255, 0.6);
-    table-layout: fixed;
+    box-shadow: 0 0 40px rgba(0, 170, 255, 0.5);
 }
 
 td {
     width: var(--cell-size);
     height: var(--cell-size);
-    max-width: var(--cell-size);
-    max-height: var(--cell-size);
     position: relative;
-    box-sizing: border-box;
-    vertical-align: middle;
-    overflow: hidden;
+    padding: 0;
 }
 
+/* Styles des cellules */
 .wall {
-    background: #100a35;
-    border: 3px solid #00aaff;
-    box-shadow: inset 0 0 8px rgba(0, 170, 255, 0.3);
+    background: var(--wall-color);
+    border: 3px solid var(--border-color);
+    box-sizing: border-box;
 }
 
 .path {
-    background: #070606;
-    box-shadow: inset 0 0 0 2px #1a1a1a;
+    background: var(--path-color);
 }
 
-#pacman-container,
+/* Conteneurs pour objets (PacMan / Fantômes) */
+#pacman-container, 
 .ghosts-container {
     width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0;
 }
 
+/* Forcer les images à remplir l'espace */
 #pacman-container img,
 .ghosts-container img {
-    display: block;
-    width: 100%;
-    height: 100%;
+    width: 95%;
+    height: 95%;
     object-fit: contain;
-    padding: 0;
 }
 
+/* Points */
 .pac-dot {
     width: 100%;
     height: 100%;
@@ -126,20 +69,10 @@ td {
 }
 
 .pac-dot svg {
-    width: 35%;
-    height: 35%;
-    display: block;
+    width: 40%;
+    height: 40%;
 }
 
-@media (max-width: 1200px) {
-    :root { --cell-size: 28px; }
-}
-@media (max-width: 900px) {
-    :root { --cell-size: 24px; }
-}
-@media (max-width: 600px) {
-    :root { --cell-size: 20px; }
-}
-@media (max-width: 400px) {
-    :root { --cell-size: 16px; }
-}
+/* Ajustements responsifs */
+@media (max-width: 900px) { :root { --cell-size: 35px; } }
+@media (max-width: 600px) { :root { --cell-size: 25px; } }
