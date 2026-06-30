@@ -1,78 +1,152 @@
-:root {
-    --cell-size: 40px; /* Taille de base ajustable */
-    --wall-color: #100a35;
-    --border-color: #00aaff;
-    --path-color: #070606;
+:root{
+    --cell-size:49px;
+    --wall-color:#100a35;
+    --border-color:#00aaff;
+    --path-color:#000;
 }
 
-body {
-    margin: 0;
-    background: #000;
-    min-height: 100vh;
-    font-family: 'Arial', sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: white;
+body{
+    margin:0;
+    background:#000;
+    min-height:100vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
 }
 
-/* Grille du labyrinthe */
-table {
-    border-collapse: collapse;
-    background: transparent;
-    box-shadow: 0 0 40px rgba(0, 170, 255, 0.5);
+/* ===========================
+   LABYRINTHE
+=========================== */
+
+#maze{
+    display:grid;
+
+    grid-template-columns:repeat(19,var(--cell-size));
+    grid-template-rows:repeat(19,var(--cell-size));
+
+    box-shadow:0 0 40px rgba(0,170,255,.5);
 }
 
-td {
-    width: var(--cell-size);
-    height: var(--cell-size);
-    position: relative;
-    padding: 0;
+/* ===========================
+   CELLULE COMMUNE
+=========================== */
+
+.cell{
+    width:var(--cell-size);
+    height:var(--cell-size);
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    box-sizing:border-box;
 }
 
-/* Styles des cellules */
-.wall {
-    background: var(--wall-color);
-    border: 3px solid var(--border-color);
-    box-sizing: border-box;
+/* ===========================
+   MUR
+=========================== */
+
+.wall{
+    background:var(--wall-color);
+    border:3px solid var(--border-color);
 }
 
-.path {
-    background: var(--path-color);
+/* ===========================
+   CHEMIN SIMPLE
+=========================== */
+
+.path{
+    background:var(--path-color);
 }
 
-/* Conteneurs pour objets (PacMan / Fantômes) */
-#pacman-container, 
-.ghosts-container {
+/* ===========================
+   CASE PACMAN
+=========================== */
+
+.pacman-cell{
+    background:var(--path-color);
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+/* ===========================
+   CASE FANTÔME
+=========================== */
+
+.ghost-cell{
+    background:var(--path-color);
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+/* ===========================
+   CASE POINT
+=========================== */
+
+.dot-cell{
+    background:var(--path-color);
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+/* ===========================
+   PACMAN
+=========================== */
+
+#pacman-container {
     width: 100%;
     height: 100%;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
 }
 
-/* Forcer les images à remplir l'espace */
-#pacman-container img,
-.ghosts-container img {
-    width: 95%;
-    height: 95%;
+#pacman-container img {
+    /* On passe à 100% au lieu de 95% */
+    width: 100%;
+    height: 100%;
     object-fit: contain;
+    
+    /* Agrandit Pac-Man de 40% pour qu'il remplisse largement le chemin */
+    transform: scale(1.4); 
+    position: relative;
+    z-index: 10; /* Assure qu'il passe par-dessus les murs s'il déborde */
 }
 
-/* Points */
+/* ===========================
+   FANTÔMES
+=========================== */
+
+.ghost-container {
+    width: 90%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+/* ===========================
+   PAC-DOT (Points)
+=========================== */
+
 .pac-dot {
     width: 100%;
     height: 100%;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
 }
 
 .pac-dot svg {
-    width: 40%;
-    height: 40%;
+    /* On augmente drastiquement la taille (de 35% à 60%) */
+    width: 60%;
+    height: 60%;
 }
-
-/* Ajustements responsifs */
-@media (max-width: 900px) { :root { --cell-size: 35px; } }
-@media (max-width: 600px) { :root { --cell-size: 25px; } }

@@ -23,53 +23,89 @@ export const maze = [
 [1,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,1],
 [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 ]
-const table = document.getElementById('maze');
+
+const mazeContainer = document.getElementById("maze");
 
 maze.forEach(row => {
-    const tr = document.createElement('tr');
-
     row.forEach(cell => {
-        const td = document.createElement('td');
 
-        if (cell === 1) {
-            td.classList.add('wall');
-        }// Dans votre boucle de création de cellules (td) :
-if (cell === 2) {
-    td.classList.add('path');
-    const pacContainer = document.createElement('div');
-    pacContainer.id = 'pacman-container';
-    // Ajout d'un style direct pour forcer la taille maximale
-    pacContainer.style.width = "100%";
-    pacContainer.style.height = "100%";
-    pacContainer.innerHTML = `<img src="jeu.png" alt="Pac-Man">`;
-    td.appendChild(pacContainer);
+  const div = document.createElement("div");
+
+div.classList.add("cell");
+
+if (cell === 1) {
+    div.classList.add("wall");
 }
-        else if (cell === 3 || cell === 4 || cell === 5) {
-            td.classList.add('path', 'ghost-cell');
-            const ghost = document.createElement('div');
-            ghost.className = 'ghosts-container';
-            const imgSrc = cell === 3 ? './assets/jeu (3).png' :
-                cell === 4 ? './assets/jeu (4).png' : './assets/jeu (5).png';
-            ghost.innerHTML = `<img src="${imgSrc}" alt="Ghost">`;
-            td.appendChild(ghost);
-        }
-        else if (cell === 6) {
-            td.classList.add('path', 'dot-cell');
-            const dot = document.createElement('div');
-            dot.innerHTML = `<svg width="30%" height="30%" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="12" cy="12" r="6" fill="#FFEB3B" stroke="#FFD700" stroke-width="1.5"/>
+
+else if (cell === 2) {
+    div.classList.add("path");
+    div.classList.add("pacman-cell");
+
+    const pacman = document.createElement("div");
+    pacman.id = "pacman-container";
+    pacman.innerHTML = `<img src="./jeu.png">`;
+
+    div.appendChild(pacman);
+}
+
+else if (cell === 3 || cell === 4 || cell === 5) {
+
+    div.classList.add("path");
+    div.classList.add("ghost-cell");
+
+    const ghost = document.createElement("div");
+    ghost.className = "ghost-container";
+
+    // Définir la couleur du fantôme
+    // 3 = Rose (Pinky), 4 = Bleu (Inky), 5 = Vert (Funky)
+    const ghostColor = 
+        cell === 3 ? "#ff0090" : 
+        cell === 4 ? "#00FFFF" : 
+                     "#ef661c";
+
+    // Génération du fantôme en SVG
+    ghost.innerHTML = `
+        <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+            <!-- Corps du fantôme -->
+            <path fill="${ghostColor}" d="M0,14 V7 A7,7 0 0,1 14,7 V14 L11.5,12 L9,14 L7,12 L5,14 L2.5,12 L0,14 Z" />
+            
+            <!-- Fond des yeux (blanc) -->
+            <circle cx="4" cy="5.5" r="2.2" fill="white" />
+            <circle cx="10" cy="5.5" r="2.2" fill="white" />
+            
+            <!-- Pupilles (bleues) -->
+            <circle cx="3.5" cy="5.5" r="1.2" fill="blue" />
+            <circle cx="9.5" cy="5.5" r="1.2" fill="blue" />
         </svg>
     `;
-            dot.className = 'pac-dot';
 
-            td.appendChild(dot);
-        }
-        else {
-            td.classList.add('path');
-        }
+    div.appendChild(ghost);
+}
+else if (cell === 6) {
 
-        tr.appendChild(td);
+    div.classList.add("path");
+    div.classList.add("dot-cell");
+
+    const dot = document.createElement("div");
+    dot.className = "pac-dot";
+
+    dot.innerHTML = `
+        <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="6"
+                fill="#FFEB3B"
+                stroke="#FFD700"
+                stroke-width="1.5"/>
+        </svg>
+    `;
+
+    div.appendChild(dot);
+}
+
+else {
+    div.classList.add("path");
+}
+
+mazeContainer.appendChild(div);
+
     });
-
-    table.appendChild(tr);
 });

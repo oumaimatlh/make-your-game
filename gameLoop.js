@@ -1,142 +1,99 @@
-// import { maze } from "./maze.js";
+import { maze } from "./maze.js";
 
-// // STATE
-// var state = {
-//     pacMan: {
-//         row: 15,
-//         col: 11,
-//         direction: null,
-//         nextDirection: '',
-//         moveTimer: 0,
-//         moveDelay: 80
-//     },
-//     fantome: {
-//         green: { row: 12, col: 9, direction: '', nextDirection: '' },
-//         red: { row: 12, col: 11, direction: '', nextDirection: '' },
-//         pink: { row: 12, col: 13, direction: '', nextDirection: '' }
-//     },
-//     score: 0,
-//     lives: 3,
-//     running: true,
-//     paused: false,
-//     gameOver: false,
-//     win: false,
-//    lastTime: 0,
-//     deltaTime: 0,
-//     frameCount: 0,
-//     fps: 0,
-//     fpsTimer: 0,
-// };
+// STATE
+var state = {
+    pacMan: {
+        row: 11,
+        col: 9,
+        direction: null,
+        moveTimer: 0,
+        moveDelay: 110
+    },
+    score: 0,
+    lives: 3,
+    lastTime: 0,
+    deltaTime: 0,
+};
 
+window.addEventListener('keydown', (event) => {
+    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+        event.preventDefault();
+        state.pacMan.direction = event.key;
+    }
+});
 
-// window.addEventListener('keydown', (event) => {
-//     if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
-//         event.preventDefault();
-//         state.pacMan.direction = event.key;
-//     }
-// });
+function update() {
+    if (!state.pacMan.direction) return;
 
+    state.pacMan.moveTimer += state.deltaTime * 1000;
+    if (state.pacMan.moveTimer < state.pacMan.moveDelay) return;
 
-// function update() {
+    state.pacMan.moveTimer = 0;
 
-//     if (!state.pacMan.direction) return;
+    let newRow = state.pacMan.row;
+    let newCol = state.pacMan.col;
 
-//     state.pacMan.moveTimer += state.deltaTime * 1000;
+    switch (state.pacMan.direction) {
+        case "ArrowRight": newCol++; break;
+        case "ArrowLeft":  newCol--; break;
+        case "ArrowUp":    newRow--; break;
+        case "ArrowDown":  newRow++; break;
+    }
 
-//     if (state.pacMan.moveTimer < state.pacMan.moveDelay) return;
+    if (newRow < 0 || newRow >= maze.length || 
+        newCol < 0 || newCol >= maze[0].length || 
+        maze[newRow][newCol] === 1) {
+        return;
+    }
 
-//     state.pacMan.moveTimer = 0;
+    // Déplacement
+    state.pacMan.row = newRow;
+    state.pacMan.col = newCol;
 
-//     let newRow = state.pacMan.row;
-//     let newCol = state.pacMan.col;
+    // Manger le dot + suppression visuelle
+    if (maze[newRow][newCol] === 6) {
+        maze[newRow][newCol] = 0;
+        state.score += 10;
 
-//     switch (state.pacMan.direction) {
-//         case "ArrowRight":
-//             newCol++;
-//             break;
-//         case "ArrowLeft":
-//             newCol--;
-//             break;
-//         case "ArrowUp":
-//             newRow--;
-//             break;
-//         case "ArrowDown":
-//             newRow++;
-//             break;
-//     }
+        // Suppression visuelle du dot
+        const cells = document.querySelectorAll('#maze .cell');
+        const index = newRow * maze[0].length + newCol;
+        const cell = cells[index];
 
-//     if (
-//         newRow < 0 ||
-//         newRow >= maze.length ||
-//         newCol < 0 ||
-//         newCol >= maze[0].length
-//     ) return;
+        const dot = cell.querySelector('.pac-dot');
+        if (dot) dot.remove();
+    }
+}
 
-//     if (maze[newRow][newCol] === 1) return;
+function render() {
+    // Supprimer l'ancien Pac-Man
+    const oldPac = document.getElementById("pacman-container");
+    if (oldPac) oldPac.remove();
 
-//     state.pacMan.row = newRow;
-//     state.pacMan.col = newCol;
-// }
+    // Ajouter Pac-Man à la nouvelle position
+    const cells = document.querySelectorAll('#maze .cell');
+    const index = state.pacMan.row * maze[0].length + state.pacMan.col;
+    const targetCell = cells[index];
 
+    if (!targetCell) return;
 
-// function render() {
+    const pacDiv = document.createElement('div');
+    pacDiv.id = "pacman-container";
+    pacDiv.innerHTML = `<img src="./jeu.png" alt="Pac-Man">`;
 
-//     const rows = document.getElementsByTagName('tr');
+    targetCell.appendChild(pacDiv);
+}
 
-//     const old = document.querySelector('#pacman-container');
-//     if (old) {
-//         old.innerHTML = '';
-//         old.id = '';
-//     }
+function engine(currentTime) {
+    if (state.lastTime === 0) state.lastTime = currentTime;
 
-//     const cell = rows[state.pacMan.row].children[state.pacMan.col];
+    state.deltaTime = (currentTime - state.lastTime) / 1000;
+    state.lastTime = currentTime;
 
-//     const pacDiv = document.createElement('div');
-//     pacDiv.innerHTML = `<img src="./jeu.png" alt="Pac-Man">`;
+    update();
+    render();
 
-//     cell.innerHTML = '';
-//     cell.appendChild(pacDiv);
-//     cell.id = "pacman-container";
-// }
+    requestAnimationFrame(engine);
+}
 
-
-// function engine(currentTime) {
-
-//     if (state.lastTime === 0) {
-//         state.lastTime = currentTime;
-//     }
-
-//     state.deltaTime = (currentTime - state.lastTime) / 1000;
-//     state.lastTime = currentTime;
-
-//     // Gestion FPS
-//     state.frameCount++;
-//     state.fpsTimer += state.deltaTime;
-
-//     if (state.fpsTimer >= 1) {
-//         state.fps = state.frameCount;
-
-//         console.clear();
-//         console.log("FPS :", state.fps);
-
-//         state.frameCount = 0;
-//         state.fpsTimer = 0;
-//     }
-
-//     if (!state.paused && !state.gameOver) {
-//         update();
-//         render();
-//     }
-
-//     requestAnimationFrame(engine);
-// }
-// requestAnimationFrame(engine);
-
-// /*
-//     FPS ; Frame per Second
-
-// À chaque frame (image), le navigateur :
-
-// met à jour le jeu (update)
-// redessine le jeu (render)
-// */
+requestAnimationFrame(engine);
