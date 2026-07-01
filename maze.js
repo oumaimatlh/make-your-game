@@ -11,8 +11,8 @@ export const maze = [
 [1,6,1,6,6,6,6,6,6,1,6,6,6,6,6,6,1,6,1],
 [1,6,1,6,1,1,1,1,6,1,6,1,1,1,1,6,1,6,1],
 [1,6,6,6,1,6,6,6,6,6,6,6,6,6,1,6,6,6,1],
-[1,1,1,6,1,6,1,1,6,6,6,1,1,6,1,6,1,1,1],
-[6,6,6,6,1,6,1,3,6,4,6,5,1,6,1,6,6,6,6],
+[1,1,1,6,1,6,1,1,7,7,7,1,1,6,1,6,1,1,1],
+[6,6,6,6,1,6,1,3,0,4,0,5,1,6,1,6,6,6,6],
 [1,1,1,6,1,6,1,1,1,1,1,1,1,6,1,6,1,1,1],
 [1,6,6,6,6,6,6,6,6,2,6,6,6,6,6,6,6,6,1],
 [1,6,1,1,1,6,1,1,1,1,1,1,1,6,1,1,1,6,1],
@@ -25,87 +25,83 @@ export const maze = [
 ]
 
 const mazeContainer = document.getElementById("maze");
-
 maze.forEach(row => {
     row.forEach(cell => {
+        const div = document.createElement("div");
+        div.classList.add("cell");
 
-  const div = document.createElement("div");
+        if (cell === 1) {
+            div.classList.add("wall");
+        }
+        
+        else if (cell === 2) {
+            div.classList.add("path");
+            div.classList.add("pacman-cell");
 
-div.classList.add("cell");
-
-if (cell === 1) {
-    div.classList.add("wall");
-}
-
-else if (cell === 2) {
-    div.classList.add("path");
-    div.classList.add("pacman-cell");
-
-    const pacman = document.createElement("div");
-    pacman.id = "pacman-container";
-    pacman.innerHTML = `<img src="./jeu.png">`;
-
-    div.appendChild(pacman);
-}
-
-else if (cell === 3 || cell === 4 || cell === 5) {
-
-    div.classList.add("path");
-    div.classList.add("ghost-cell");
-
-    const ghost = document.createElement("div");
-    ghost.className = "ghost-container";
-
-    // Définir la couleur du fantôme
-    // 3 = Rose (Pinky), 4 = Bleu (Inky), 5 = Vert (Funky)
-    const ghostColor = 
-        cell === 3 ? "#ff0090" : 
-        cell === 4 ? "#00FFFF" : 
-                     "#ef661c";
-
-    // Génération du fantôme en SVG
-    ghost.innerHTML = `
-        <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
-            <!-- Corps du fantôme -->
-            <path fill="${ghostColor}" d="M0,14 V7 A7,7 0 0,1 14,7 V14 L11.5,12 L9,14 L7,12 L5,14 L2.5,12 L0,14 Z" />
+            const pacman = document.createElement("div");
+            pacman.id = "pacman-container";
             
-            <!-- Fond des yeux (blanc) -->
-            <circle cx="4" cy="5.5" r="2.2" fill="white" />
-            <circle cx="10" cy="5.5" r="2.2" fill="white" />
+            pacman.innerHTML = `
+                <svg viewBox="0 0 14 14" style="shape-rendering: crispEdges; width: 100%; height: 100%;">
+                    <path fill="#FFFF00" d="M4,0h6v1h2v1h1v2h1v6h-1v2h-1v1h-2v1H4v-1H2v-1H1v-1H0V9h6V8h2V6H6V5H0V4h1V2h2V1h1V0z"/>
+                </svg>
+            `;
+            div.appendChild(pacman);
+        }
+
+        else if (cell === 3 || cell === 4 || cell === 5) {
+            div.classList.add("path");
+            div.classList.add("ghost-cell");
+
+            const ghost = document.createElement("div");
+            ghost.className = "ghost-container";
+
             
-            <!-- Pupilles (bleues) -->
-            <circle cx="3.5" cy="5.5" r="1.2" fill="blue" />
-            <circle cx="9.5" cy="5.5" r="1.2" fill="blue" />
-        </svg>
-    `;
+            const ghostColor = 
+                cell === 3 ? "#ff1d87" : 
+                cell === 4 ? "#00ffff" :
+                             "#ff583b"; 
 
-    div.appendChild(ghost);
-}
-else if (cell === 6) {
+            ghost.innerHTML = `
+                <svg viewBox="0 0 14 14" style="shape-rendering: crispEdges; width: 100%; height: 100%;">
+                    <!-- Corps pixelisé du fantôme -->
+                    <path fill="${ghostColor}" d="M4,0h6v1h2v1h1v1h1v7h-1v1h-1v2h-1v-1h-1v-1h-1v1h-2v-1h-1v1h-1v1H2v-2H1v-1H0V3h1V2h1V1h2V0z"/>
+                    
+                    <!-- Blanc des yeux -->
+                    <rect x="2" y="3" width="3" height="4" fill="white"/>
+                    <rect x="8" y="3" width="3" height="4" fill="white"/>
+                    
+                    <!-- Pupilles bleues (regard vers la gauche) -->
+                    <rect x="2" y="4" width="2" height="2" fill="#2121ff"/>
+                    <rect x="8" y="4" width="2" height="2" fill="#2121ff"/>
+                </svg>
+            `;
+            div.appendChild(ghost);
+        }
+        else if (cell === 7 ){
+        
+            div.classList.add('door')
 
-    div.classList.add("path");
-    div.classList.add("dot-cell");
+        }
 
-    const dot = document.createElement("div");
-    dot.className = "pac-dot";
+        else if (cell === 6) {
+            div.classList.add("path");
+            div.classList.add("dot-cell");
 
-    dot.innerHTML = `
-        <svg viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="6"
-                fill="#FFEB3B"
-                stroke="#FFD700"
-                stroke-width="1.5"/>
-        </svg>
-    `;
+            const dot = document.createElement("div");
+            dot.className = "pac-dot";
+            dot.innerHTML = `
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="6" fill="#FFEB3B" stroke="#FFD700" stroke-width="1.5"/>
+                </svg>
+            `;
+            div.appendChild(dot);
+        }
 
-    div.appendChild(dot);
-}
+        else {
+            div.classList.add("path");
+        }
 
-else {
-    div.classList.add("path");
-}
-
-mazeContainer.appendChild(div);
-
+        mazeContainer.appendChild(div);
     });
 });

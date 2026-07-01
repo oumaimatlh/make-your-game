@@ -1,97 +1,89 @@
 import { maze } from "./maze.js";
+import { pacManRender, pacManUpdate } from "./pacMan.js";
+import { state } from "./store.js";
 
-// STATE
-var state = {
-    pacMan: {
-        row: 11,
-        col: 9,
-        direction: null,
-        moveTimer: 0,
-        moveDelay: 110
-    },
-    score: 0,
-    lives: 3,
-    lastTime: 0,
-    deltaTime: 0,
-};
+const FPS = 60;
+const FRAME_DURATION = 1000 / FPS; 
+const MAX_ACCUMULATOR = FRAME_DURATION * 5; 
+
+const startScreen = document.getElementById('start-screen');
+const pauseScreen = document.getElementById('pause-screen');
+const playBtn = document.getElementById('play-btn');
+const continueBtn = document.getElementById('continue-btn');
+const pauseBtn = document.getElementById('pause-btn');
+
+function togglePause() {
+    if (state.status === 'playing') {
+        state.status = 'paused';
+        pauseScreen.classList.remove('hidden');
+        pauseBtn.classList.add('hidden');
+    } else if (state.status === 'paused') {
+        state.status = 'playing';
+        pauseScreen.classList.add('hidden');
+        pauseBtn.classList.remove('hidden');
+    }
+}
+
+playBtn.addEventListener('click', () => {
+    state.status = 'playing';
+    startScreen.classList.add('hidden');
+    pauseBtn.classList.remove('hidden');
+});
+
+continueBtn.addEventListener('click', () => togglePause());
+pauseBtn.addEventListener('click', () => togglePause());
 
 window.addEventListener('keydown', (event) => {
     if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
         event.preventDefault();
-        state.pacMan.direction = event.key;
+        if (state.status === 'playing') {
+            state.pacMan.direction = event.key;
+        }
+    }
+
+    if (event.key === 'Escape') {
+        event.preventDefault();
+        if (state.status === 'playing' || state.status === 'paused') {
+            togglePause();
+        }
     }
 });
 
 function update() {
-    if (!state.pacMan.direction) return;
-
-    state.pacMan.moveTimer += state.deltaTime * 1000;
-    if (state.pacMan.moveTimer < state.pacMan.moveDelay) return;
-
-    state.pacMan.moveTimer = 0;
-
-    let newRow = state.pacMan.row;
-    let newCol = state.pacMan.col;
-
-    switch (state.pacMan.direction) {
-        case "ArrowRight": newCol++; break;
-        case "ArrowLeft":  newCol--; break;
-        case "ArrowUp":    newRow--; break;
-        case "ArrowDown":  newRow++; break;
-    }
-
-    if (newRow < 0 || newRow >= maze.length || 
-        newCol < 0 || newCol >= maze[0].length || 
-        maze[newRow][newCol] === 1) {
-        return;
-    }
-
-    // Déplacement
-    state.pacMan.row = newRow;
-    state.pacMan.col = newCol;
-
-    // Manger le dot + suppression visuelle
-    if (maze[newRow][newCol] === 6) {
-        maze[newRow][newCol] = 0;
-        state.score += 10;
-
-        // Suppression visuelle du dot
-        const cells = document.querySelectorAll('#maze .cell');
-        const index = newRow * maze[0].length + newCol;
-        const cell = cells[index];
-
-        const dot = cell.querySelector('.pac-dot');
-        if (dot) dot.remove();
-    }
+    pacManUpdate();
 }
 
 function render() {
-    // Supprimer l'ancien Pac-Man
-    const oldPac = document.getElementById("pacman-container");
-    if (oldPac) oldPac.remove();
-
-    // Ajouter Pac-Man à la nouvelle position
-    const cells = document.querySelectorAll('#maze .cell');
-    const index = state.pacMan.row * maze[0].length + state.pacMan.col;
-    const targetCell = cells[index];
-
-    if (!targetCell) return;
-
-    const pacDiv = document.createElement('div');
-    pacDiv.id = "pacman-container";
-    pacDiv.innerHTML = `<img src="./jeu.png" alt="Pac-Man">`;
-
-    targetCell.appendChild(pacDiv);
+    pacManRender();
 }
 
-function engine(currentTime) {
-    if (state.lastTime === 0) state.lastTime = currentTime;
+let accumulator = 0;
 
-    state.deltaTime = (currentTime - state.lastTime) / 1000;
+function engine(currentTime) {
+    if (state.lastTime === 0) {
+        state.lastTime = currentTime;
+        requestAnimationFrame(engine);
+        return;
+    }
+
+    let frameTime = currentTime - state.lastTime;
     state.lastTime = currentTime;
 
-    update();
-    render();
+    if (frameTime > MAX_ACCUMULATOR) frameTime = MAX_ACCUMULATOR;
+
+    accumulator += frameTime;
+
+    while (accumulator >= FRAME_DURATION) {
+        if (state.status === 'playing') {
+            state.deltaTime = FRAME_DURATION / 1000; // deltaTime fixe = 1/60s, comme avant
+            update();
+        }
+        accumulator -= FRAME_DURATION;
+    }
+
+    if (state.status === 'playing') {
+        render();
+    }
 
     requestAnimationFrame(engine);
 }

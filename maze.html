@@ -13,8 +13,18 @@
 <script type="module" src="maze.js"></script>
 <script type="module" src="gameLoop.js"></script>
 
-<div id="game-header"></div>
+<div id="game-header">
+    <button id="pause-btn" class="hidden"> PAUSE</button>
+</div>
 <div id="maze"></div>
+
+<div id="start-screen" class="overlay">
+    <button id="play-btn">PLAY</button>
+</div>
+
+<div id="pause-screen" class="overlay hidden">
+    <button id="continue-btn">CONTINUE</button>
+</div>
 
 </body>
 
