@@ -1,139 +1,115 @@
-:root{
-    --cell-size:40px;
-    --wall-color:#100a35;
-    --border-color:#00aaff;
-    --path-color:#000;
+:root {
+    --cell-size: 36px;
+    --bg-dark: #0a0a0c;
+    --wall-color: #121216;
+    --luxury-gold: #d4af37; /* Or élégant */
+    --gold-glow: rgba(212, 175, 55, 0.3);
+    --path-color: #0d0d11;
 }
 
-body{
-    margin:0;
-    background:#000;
-    min-height:100vh;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-}
-
-/* ===========================
-   LABYRINTHE
-=========================== */
-
-#maze{
-    display:grid;
-
-    grid-template-columns:repeat(19,var(--cell-size));
-    grid-template-rows:repeat(19,var(--cell-size));
-
-    box-shadow:0 0 40px rgba(0,170,255,.5);
-}
-
-/* ===========================
-   CELLULE COMMUNE
-=========================== */
-
-.cell{
-    width:var(--cell-size);
-    height:var(--cell-size);
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    box-sizing:border-box;
-}
-
-/* ===========================
-   MUR
-=========================== */
-
-.wall{
-    background:var(--wall-color);
-    border:3px solid var(--border-color);
-}
-
-/* ===========================
-   CHEMIN SIMPLE
-=========================== */
-
-.path{
-    background:var(--path-color);
-}
-
-.door {
-    height: 10px;
-    margin-top: 15px;
-    align-items: center;
-    background-color: rgb(209, 161, 199);
-}
-/* ===========================
-   CASE PACMAN
-=========================== */
-
-.pacman-cell{
-    background:var(--path-color);
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-}
-
-/* ===========================
-   CASE FANTÔME
-=========================== */
-
-.ghost-cell{
-    background:var(--path-color);
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-}
-
-/* ===========================
-   CASE POINT
-=========================== */
-
-.dot-cell{
-    background:var(--path-color);
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-}
-/* ===========================
-   PACMAN
-=========================== */
-
-#pacman-container {
-    width: 100%;
-    height: 100%;
+body {
+    margin: 0;
+    background: radial-gradient(circle at center, #16161d 0%, #060608 100%);
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    font-family: '-apple-system', BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
 }
 
-#pacman-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+/* ===========================
+   LE LABYRINTHE (ÉCRIN HAUTE COUTURE)
+=========================== */
+#maze {
+    display: grid;
+    grid-template-columns: repeat(19, var(--cell-size));
+    grid-template-rows: repeat(19, var(--cell-size));
+    background-color: var(--path-color);
+    padding: 12px;
+    border-radius: 16px;
+    border: 2px solid rgb(159, 76, 236);
+    box-shadow: 0 0 8px rgb(159, 76, 236)
+}
 
-    transform: scale(1.4);
+/* ===========================
+   CELLULES & MURS MINIMALISTES
+=========================== */
+.cell {
+    width: var(--cell-size);
+    height: var(--cell-size);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+/* Murs : Aspect blocs de marbre noir incrustés */
+.wall {
+    background: var(--wall-color);
     position: relative;
-    z-index: 10;
+}
+
+.wall::after {
+    content: '';
+    position: absolute;
+    top: 2px; left: 2px; right: 2px; bottom: 2px;
+    background: #18181f;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+/* PORTE DU REPAIRE (Ligne fine dorée) */
+.door {
+    background: var(--path-color);
+    position: relative;
+}
+.door::before {
+    content: '';
+    width: 100%;
+    height: 3px;
+    background: rgb(159, 76, 236);
+    box-shadow: 0 0 8px var(--luxury-gold);
+    border-radius: 2px;
 }
 
 /* ===========================
-   FANTÔMES
+   PACMAN & FANTÔMES (FINESSE)
 =========================== */
+.pacman-cell, .ghost-cell, .dot-cell, .path {
+    background: var(--path-color);
+}
 
-.ghost-container {
-    width: 90%;
-    height: 100%;
+/* Pacman devient une entité de lumière épurée et imposante */
+#pacman-container {
+    /* --- MODIFICATIONS ICI --- */
+    width: 105%;   /* Précédemment 55%, maintenant il déborde légèrement de sa case */
+    height: 105%;  /* Précédemment 55% */
+    /* -------------------------- */
+    
     display: flex;
     justify-content: center;
     align-items: center;
+    
+    /* Augmentation de la lueur pour correspondre à sa taille */
+    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.7));
+    
+    position: relative; /* Pour le z-index */
+    z-index: 2;        /* S'assure qu'il passe AU-DESSUS des lignes du labyrinthe */
 }
+
+#pacman-container svg path {
+    fill: var(--pacman-color) !important; /* Pure lumière blanche */
+}
+
+/* Fantômes adoucis en opacité */
+.ghost-container {
+    width: 75%;
+    height: 75%;
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
+    opacity: 0.9;
+}
+
 
 /* ===========================
    PAC-DOT (Points)
@@ -148,78 +124,91 @@ body{
 }
 
 .pac-dot svg {
-    width: 60%;
-    height: 60%;
-}
-#pacman-container, .ghost-container {
-    image-rendering: pixelated;
-    image-rendering: crisp-edges;
+    width: 50%;
+    height: 50%;
+    filter:drop-shadow(0 0 4px rgba(255,209,102,.8));
+    animation:dot-glow 1.8s ease-in-out infinite;
 }
 
+.pac-dot svg circle{
+    fill: rgb(255, 255, 0) !important;
+    stroke:var(--accent) !important;
+}
+
+@keyframes dot-glow{
+    0%, 100%{ opacity:.75; transform:scale(.9); }
+    50%{ opacity:1; transform:scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce){
+    .pac-dot svg{ animation:none; }
+}
 /* ===========================
-   OVERLAYS (START / PAUSE)
+   OVERLAYS & MENUS (GLASSMORPHISM)
 =========================== */
-
-.overlay{
-    position:fixed;
-    top:0; left:0;
-    width:100%; height:100%;
-
-    background:rgba(0,0,0,.85);
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    z-index:100;
+.overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(10, 10, 12, 0.6);
+    backdrop-filter: blur(15px); /* Effet verre fumé ultra chic */
+    -webkit-backdrop-filter: blur(15px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    transition: opacity 0.4s ease;
 }
 
-.overlay.hidden{
-    display:none;
+.overlay.hidden {
+    display: none;
 }
 
-.overlay button{
-    padding:16px 40px;
-    font-size:24px;
-    font-weight:bold;
-    letter-spacing:2px;
-
-    background:var(--path-color);
-    color:var(--border-color);
-    border:3px solid var(--border-color);
-    border-radius:8px;
-
-    cursor:pointer;
-    box-shadow:0 0 20px rgba(0,170,255,.6);
+/* Boutons Haute Couture */
+.overlay button {
+    padding: 16px 50px;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 5px; /* Très espacé pour le côté luxe */
+    text-transform: uppercase;
+    background: rgba(255, 255, 255, 0.03);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 1px; /* Angles droits très pointus et pro */
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.overlay button:hover{
-    background:var(--border-color);
-    color:#000;
+.overlay button:hover {
+    background: #ffffff;
+    color: #000000;
+    border-color: #ffffff;
+    letter-spacing: 7px; /* Animation d'écartement subtile */
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
 }
 
-/* ===========================
-   BOUTON PAUSE (en jeu)
-=========================== */
-
-#pause-btn{
-    position:fixed;
-    top:15px;
-    right:15px;
-
-    padding:8px 16px;
-    font-size:14px;
-    font-weight:bold;
-
-    background:var(--path-color);
-    color:var(--border-color);
-    border:2px solid var(--border-color);
-    border-radius:6px;
-
-    cursor:pointer;
-    z-index:50;
+/* BOUTON PAUSE EN JEU */
+#pause-btn {
+    position: fixed;
+    top: 30px; right: 30px;
+    padding: 8px 24px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1px;
+    cursor: pointer;
+    z-index: 50;
+    transition: all 0.3s ease;
 }
 
-#pause-btn.hidden{
-    display:none;
+#pause-btn:hover {
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+#pause-btn.hidden {
+    display: none;
 }

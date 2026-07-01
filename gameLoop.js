@@ -75,7 +75,7 @@ function engine(currentTime) {
 
     while (accumulator >= FRAME_DURATION) {
         if (state.status === 'playing') {
-            state.deltaTime = FRAME_DURATION / 1000; // deltaTime fixe = 1/60s, comme avant
+            state.deltaTime = FRAME_DURATION / 1000; 
             update();
         }
         accumulator -= FRAME_DURATION;
