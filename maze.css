@@ -1,8 +1,10 @@
 :root {
     --cell-size: 36px;
+    --path-cell-height: 55px;     /* ← Hauteur personnalisée pour les paths */
+    
     --bg-dark: #0a0a0c;
     --wall-color: #121216;
-    --luxury-gold: #d4af37; /* Or élégant */
+    --luxury-gold: #d4af37;
     --gold-glow: rgba(212, 175, 55, 0.3);
     --path-color: #0d0d11;
 }
@@ -18,9 +20,6 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* ===========================
-   LE LABYRINTHE (ÉCRIN HAUTE COUTURE)
-=========================== */
 #maze {
     display: grid;
     grid-template-columns: repeat(19, var(--cell-size));
@@ -29,12 +28,10 @@ body {
     padding: 12px;
     border-radius: 16px;
     border: 2px solid rgb(159, 76, 236);
-    box-shadow: 0 0 8px rgb(159, 76, 236)
+    box-shadow: 0 0 8px rgb(159, 76, 236);
+    gap: 0; /* important */
 }
 
-/* ===========================
-   CELLULES & MURS MINIMALISTES
-=========================== */
 .cell {
     width: var(--cell-size);
     height: var(--cell-size);
@@ -42,9 +39,29 @@ body {
     justify-content: center;
     align-items: center;
     box-sizing: border-box;
+    position: relative;
 }
 
-/* Murs : Aspect blocs de marbre noir incrustés */
+
+.path {
+    background: var(--path-color);
+    height: var(--path-cell-height) !important;   /* Hauteur augmentée */
+    align-self: center;                          /* Centre verticalement */
+    z-index: 2;
+    
+}
+
+/* Pour que le contenu (pacman, dots, etc.) reste bien centré */
+.path .pacman-cell,
+.path .ghost-cell,
+.path .dot-cell,
+.path #pacman-container,
+.path .pac-dot {
+    height: 100%;
+    width: 100%;
+}
+
+/* Wall reste normal */
 .wall {
     background: var(--wall-color);
     position: relative;
@@ -53,17 +70,20 @@ body {
 .wall::after {
     content: '';
     position: absolute;
-    top: 2px; left: 2px; right: 2px; bottom: 2px;
+    top: 2px; 
+    left: 2px; 
+    right: 2px; 
+    bottom: 2px;
     background: #18181f;
     border-radius: 4px;
     border: 1px solid rgba(255, 255, 255, 0.03);
 }
 
-/* PORTE DU REPAIRE (Ligne fine dorée) */
 .door {
     background: var(--path-color);
     position: relative;
 }
+
 .door::before {
     content: '';
     width: 100%;
@@ -73,47 +93,31 @@ body {
     border-radius: 2px;
 }
 
-/* ===========================
-   PACMAN & FANTÔMES (FINESSE)
-=========================== */
-.pacman-cell, .ghost-cell, .dot-cell, .path {
-    background: var(--path-color);
+.pacman-cell, 
+.ghost-cell, 
+.dot-cell {
+    background: transparent;
 }
 
-/* Pacman devient une entité de lumière épurée et imposante */
+/* ====================== PACMAN & GHOST ====================== */
+
 #pacman-container {
-    /* --- MODIFICATIONS ICI --- */
-    width: 105%;   /* Précédemment 55%, maintenant il déborde légèrement de sa case */
-    height: 105%;  /* Précédemment 55% */
-    /* -------------------------- */
-    
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
-    /* Augmentation de la lueur pour correspondre à sa taille */
-    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.7));
-    
-    position: relative; /* Pour le z-index */
-    z-index: 2;        /* S'assure qu'il passe AU-DESSUS des lignes du labyrinthe */
+    width: 75%;
+    height: 75%;
+    filter: drop-shadow(0 2px 8px var(--gold-glow));
+    transition: transform 0.2s ease;
 }
 
 #pacman-container svg path {
-    fill: var(--pacman-color) !important; /* Pure lumière blanche */
+    fill: yellow !important;
 }
 
-/* Fantômes adoucis en opacité */
 .ghost-container {
     width: 75%;
     height: 75%;
     filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
     opacity: 0.9;
 }
-
-
-/* ===========================
-   PAC-DOT (Points)
-=========================== */
 
 .pac-dot {
     width: 100%;
@@ -126,31 +130,32 @@ body {
 .pac-dot svg {
     width: 50%;
     height: 50%;
-    filter:drop-shadow(0 0 4px rgba(255,209,102,.8));
-    animation:dot-glow 1.8s ease-in-out infinite;
+    filter: drop-shadow(0 0 4px rgba(255,209,102,.8));
+    animation: dot-glow 1.8s ease-in-out infinite;
 }
 
-.pac-dot svg circle{
-    fill: rgb(255, 255, 0) !important;
-    stroke:var(--accent) !important;
+.pac-dot svg circle {
+    fill: rgb(140, 255, 9) !important;
 }
 
-@keyframes dot-glow{
-    0%, 100%{ opacity:.75; transform:scale(.9); }
-    50%{ opacity:1; transform:scale(1); }
+@keyframes dot-glow {
+    0%, 100% { opacity: .75; transform: scale(.9); }
+    50% { opacity: 1; transform: scale(1); }
 }
 
-@media (prefers-reduced-motion: reduce){
-    .pac-dot svg{ animation:none; }
+@media (prefers-reduced-motion: reduce) {
+    .pac-dot svg { animation: none; }
 }
+
 /* ===========================
-   OVERLAYS & MENUS (GLASSMORPHISM)
+   OVERLAYS & MENUS 
 =========================== */
+
 .overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(10, 10, 12, 0.6);
-    backdrop-filter: blur(15px); /* Effet verre fumé ultra chic */
+    backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     display: flex;
     justify-content: center;
@@ -163,17 +168,16 @@ body {
     display: none;
 }
 
-/* Boutons Haute Couture */
 .overlay button {
     padding: 16px 50px;
     font-size: 16px;
     font-weight: 500;
-    letter-spacing: 5px; /* Très espacé pour le côté luxe */
+    letter-spacing: 5px;
     text-transform: uppercase;
     background: rgba(255, 255, 255, 0.03);
     color: #ffffff;
     border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 1px; /* Angles droits très pointus et pro */
+    border-radius: 1px;
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -182,11 +186,10 @@ body {
     background: #ffffff;
     color: #000000;
     border-color: #ffffff;
-    letter-spacing: 7px; /* Animation d'écartement subtile */
+    letter-spacing: 7px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.3);
 }
 
-/* BOUTON PAUSE EN JEU */
 #pause-btn {
     position: fixed;
     top: 30px; right: 30px;

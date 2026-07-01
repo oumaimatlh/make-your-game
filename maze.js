@@ -41,22 +41,30 @@ maze.forEach(row => {
             const pacman = document.createElement("div");
             pacman.id = "pacman-container";
             
-          pacman.innerHTML = `
-    <svg viewBox="0 0 22 22" width="100%" height="100%" style="shape-rendering: crispEdges;">
-        <defs>
-            <clipPath id="mouthClip">
-                <path d="M11 4 Q20 8 20 11 Q20 14 11 18 Q4 14 4 11 Q4 8 11 4 Z"/>
-            </clipPath>
-        </defs>
-        
-        <!-- Corps jaune -->
-        <circle cx="11" cy="11" r="9" fill="#FFEF00" stroke="#000" stroke-width="1.5"/>
-        
-        <!-- Bouche (noire) -->
-        <path d="M11 11 L20 7 L20 15 Z" fill="#000"/>
-        
-        <!-- Œil -->
-        <circle cx="14.5" cy="8" r="2" fill="#000"/>
+     pacman.innerHTML = `
+    <svg viewBox="0 0 11 11" width="100%" height="100%" style="shape-rendering: crispEdges;">
+        <!-- Corps en pixel art avec contour noir -->
+        <path d="
+            M 4,0 H 9 
+            V 1 H 11 
+            V 2 H 12 
+            V 4 H 11 
+            V 5 H 9 
+            V 6 H 6 
+            V 7 H 9 
+            V 8 H 11 
+            V 9 H 12 
+            V 11 H 11 
+            V 12 H 9 
+            V 13 H 4 
+            V 12 H 2 
+            V 11 H 1 
+            V 9 H 0 
+            V 4 H 1 
+            V 2 H 2 
+            V 1 H 4 
+            Z
+        " fill="#FDEA22" stroke="#000" stroke-width="0.5" stroke-linejoin="miter" />
     </svg>
 `;
             div.appendChild(pacman);

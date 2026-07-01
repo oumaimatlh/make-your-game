@@ -19,25 +19,27 @@ function pacManUpdate() {
         case "ArrowDown": newRow++; break;
     }
 
-  
-if (newCol < 0) {
-    newCol = maze[0].length - 1;
-}
-else if (newCol >= maze[0].length) {
-    newCol = 0;
-}
+    // Gestion des tunnels (bords de l'écran)
+    if (newCol < 0) {
+        newCol = maze[0].length - 1;
+    }
+    else if (newCol >= maze[0].length) {
+        newCol = 0;
+    }
 
-if (newRow < 0 || newRow >= maze.length) {
-    return;
-}
+    if (newRow < 0 || newRow >= maze.length) {
+        return;
+    }
 
-if (maze[newRow][newCol] === 1 || maze[newRow][newCol] === 7) {
-    return;
-}
+    // Collision murs (1) et porte des fantômes (7)
+    if (maze[newRow][newCol] === 1 || maze[newRow][newCol] === 7) {
+        return;
+    }
 
     state.pacMan.row = newRow;
     state.pacMan.col = newCol;
 
+    // Manger un Pac-Dot (6)
     if (maze[newRow][newCol] === 6 ){
         maze[newRow][newCol] = 0;
         state.score += 10;
@@ -52,6 +54,7 @@ if (maze[newRow][newCol] === 1 || maze[newRow][newCol] === 7) {
 }
 
 function pacManRender() {
+    // Supprime l'ancien Pac-Man s'il existe
     const oldPac = document.getElementById("pacman-container");
     if (oldPac) oldPac.remove();
 
@@ -61,6 +64,7 @@ function pacManRender() {
 
     if (!targetCell) return;
 
+    // Calcul de l'orientation
     let transformStyle = "rotate(0deg)"; 
     switch (state.pacMan.direction) {
         case "ArrowRight": 
@@ -70,18 +74,51 @@ function pacManRender() {
             transformStyle = "rotate(90deg)"; 
             break;
         case "ArrowLeft": 
-            transformStyle = "scaleX(-1)"; 
+            transformStyle = "scaleX(-1)"; // Retourne le pixel art vers la gauche
             break;
         case "ArrowUp": 
             transformStyle = "rotate(-90deg)"; 
             break;
     }
 
+    // Création du conteneur de Pac-Man
     const pacDiv = document.createElement('div');
     pacDiv.id = "pacman-container";
     
-    pacDiv.innerHTML = `<img src="./jeu.png" alt="Pac-Man" style="transform: ${transformStyle}; width: 100%; height: 100%; transition: transform 0.1s ease-in-out;">`;
+    // APPLICATION DE LA ROTATION / DIRECTION
+    pacDiv.style.transform = transformStyle;
+    pacDiv.style.width = "100%";
+    pacDiv.style.height = "100%";
+    
+    // Injection du SVG Pixel Art (Correction de la faute de syntaxe)
+    pacDiv.innerHTML = `
+    <svg viewBox="0 0 14 13" width="100%" height="100%" style="shape-rendering: crispEdges;">
+        <!-- Corps en pixel art conforme à Screenshot from 2026-07-01 16-57-19.png -->
+        <path d="
+            M 4,0 H 9 
+            V 1 H 11 
+            V 2 H 12 
+            V 4 H 11 
+            V 5 H 9 
+            V 6 H 6 
+            V 7 H 9 
+            V 8 H 11 
+            V 9 H 12 
+            V 11 H 11 
+            V 12 H 9 
+            V 13 H 4 
+            V 12 H 2 
+            V 11 H 1 
+            V 9 H 0 
+            V 4 H 1 
+            V 2 H 2 
+            V 1 H 4 
+            Z
+        " fill="#FDEA22" stroke="#000" stroke-width="0.5" stroke-linejoin="miter" />
+    </svg>
+    `;
 
     targetCell.appendChild(pacDiv);
 }
-export { pacManRender, pacManUpdate }
+
+export { pacManRender, pacManUpdate };
