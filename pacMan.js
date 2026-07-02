@@ -19,7 +19,6 @@ function pacManUpdate() {
         case "ArrowDown": newRow++; break;
     }
 
-    // Gestion des tunnels (bords de l'écran)
     if (newCol < 0) {
         newCol = maze[0].length - 1;
     }
@@ -31,7 +30,6 @@ function pacManUpdate() {
         return;
     }
 
-    // Collision murs (1) et porte des fantômes (7)
     if (maze[newRow][newCol] === 1 || maze[newRow][newCol] === 7) {
         return;
     }
@@ -39,7 +37,6 @@ function pacManUpdate() {
     state.pacMan.row = newRow;
     state.pacMan.col = newCol;
 
-    // Manger un Pac-Dot (6)
     if (maze[newRow][newCol] === 6 ){
         maze[newRow][newCol] = 0;
         state.score += 10;
@@ -54,7 +51,6 @@ function pacManUpdate() {
 }
 
 function pacManRender() {
-    // Supprime l'ancien Pac-Man s'il existe
     const oldPac = document.getElementById("pacman-container");
     if (oldPac) oldPac.remove();
 
@@ -64,7 +60,6 @@ function pacManRender() {
 
     if (!targetCell) return;
 
-    // Calcul de l'orientation
     let transformStyle = "rotate(0deg)"; 
     switch (state.pacMan.direction) {
         case "ArrowRight": 
@@ -74,23 +69,20 @@ function pacManRender() {
             transformStyle = "rotate(90deg)"; 
             break;
         case "ArrowLeft": 
-            transformStyle = "scaleX(-1)"; // Retourne le pixel art vers la gauche
+            transformStyle = "scaleX(-1)"; 
             break;
         case "ArrowUp": 
             transformStyle = "rotate(-90deg)"; 
             break;
     }
 
-    // Création du conteneur de Pac-Man
     const pacDiv = document.createElement('div');
     pacDiv.id = "pacman-container";
     
-    // APPLICATION DE LA ROTATION / DIRECTION
     pacDiv.style.transform = transformStyle;
     pacDiv.style.width = "100%";
     pacDiv.style.height = "100%";
     
-    // Injection du SVG Pixel Art (Correction de la faute de syntaxe)
     pacDiv.innerHTML = `
     <svg viewBox="0 0 14 13" width="100%" height="100%" style="shape-rendering: crispEdges;">
         <!-- Corps en pixel art conforme à Screenshot from 2026-07-01 16-57-19.png -->

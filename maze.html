@@ -12,10 +12,28 @@
 
 <script type="module" src="maze.js"></script>
 <script type="module" src="gameLoop.js"></script>
-
 <div id="game-header">
-    <button id="pause-btn" class="hidden"> PAUSE</button>
+    <div class="hud-block">
+        <span class="hud-label">SCORE</span>
+        <span class="hud-value" id="score-value">0</span>
+    </div>
+
+    <div class="hud-block center-block">
+        <span class="hud-label">LIVES</span>
+        <div id="lives-value">
+            <span class="life-icon"><svg viewBox="0 0 13 13"><path d="M4,0 H9 V1 H11 V2 H12 V4 H11 V5 H9 V6 H6 V7 H9 V8 H11 V9 H12 V11 H11 V12 H9 V13 H4 V12 H2 V11 H1 V9 H0 V4 H1 V2 H2 V1 H4 Z" fill="yellow" /></svg></span>
+            <span class="life-icon"><svg viewBox="0 0 13 13"><path d="M4,0 H9 V1 H11 V2 H12 V4 H11 V5 H9 V6 H6 V7 H9 V8 H11 V9 H12 V11 H11 V12 H9 V13 H4 V12 H2 V11 H1 V9 H0 V4 H1 V2 H2 V1 H4 Z" fill="yellow" /></svg></span>
+            <span class="life-icon"><svg viewBox="0 0 13 13"><path d="M4,0 H9 V1 H11 V2 H12 V4 H11 V5 H9 V6 H6 V7 H9 V8 H11 V9 H12 V11 H11 V12 H9 V13 H4 V12 H2 V11 H1 V9 H0 V4 H1 V2 H2 V1 H4 Z" fill="yellow" /></svg></span>
+        </div>
+        <button id="pause-btn" class="hidden">PAUSE</button>
+    </div>
+
+    <div class="hud-block text-right">
+        <span class="hud-label">TIME</span>
+        <span class="hud-value" id="time-value">00:00</span>
+    </div>
 </div>
+
 <div id="maze"></div>
 
 <div id="start-screen" class="overlay">
