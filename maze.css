@@ -1,5 +1,4 @@
 :root {
-    /* Taille de cellule fluide : min 18px, max 36px, s'adapte à la largeur de l'écran */
     --cell-size: clamp(16px, 4.6vw, 36px);
     --path-cell-height: clamp(22px, 6.6vw, 55px); /* Hauteur personnalisée pour les paths */
 
@@ -142,12 +141,13 @@ body {
 .pac-dot svg {
     width: 50%;
     height: 50%;
-    filter: drop-shadow(0 0 4px rgba(255,209,102,.8));
+    filter: drop-shadow(0 0 4px rgb(1, 24, 54));
     animation: dot-glow 1.8s ease-in-out infinite;
 }
 
 .pac-dot svg circle {
-    fill: rgb(140, 255, 9) !important;
+    fill:#fffff6!important;
+    stroke :#fff0ed ;
 }
 
 @keyframes dot-glow {
@@ -257,7 +257,6 @@ body {
     pointer-events: auto;
 }
 
-/* Groupe pour le Score et le Temps (Alignements latéraux symétriques) */
 .hud-item {
     display: flex;
     flex-direction: column;
@@ -265,14 +264,13 @@ body {
 }
 
 #game-header .hud-item:nth-child(1) {
-    align-items: flex-start; /* Score à gauche */
+    align-items: flex-start; 
 }
 
 #game-header .hud-item:nth-child(3) {
-    align-items: flex-end; /* Temps à droite */
+    align-items: flex-end;
 }
 
-/* Centre : Compteur de Vies + Bouton Pause imbriqué proprement */
 .hud-center-group {
     grid-column: 2;
     display: flex;
@@ -476,8 +474,11 @@ body {
     font-family: 'Press Start 2P', cursive;
     font-size: 1.5rem;
     background-color: transparent;
-    color: #fd2d6c; /* Rouge fantôme (Blinky) */
-    border: 4px solid #fd2d6c;
+    color: #e781a0; 
+    
+    background: rgba(15, 15, 24, 0.774);
+    border-radius: 5px;
+    backdrop-filter: blur(20px) saturate(180%);
     padding: 15px 30px;
     cursor: pointer;
     transition: all 0.2s ease;

@@ -113,7 +113,7 @@ maze.forEach(row => {
             dot.className = "pac-dot";
             dot.innerHTML = `
                 <svg viewBox="0 0 24 24">
-                    <circle cx="12" cy="12" r="6" fill="#FFEB3B" stroke="#FFD700" stroke-width="1.5"/>
+                    <circle cx="12" cy="12" r="6"  stroke-width="1.5"/>
                 </svg>
             `;
             div.appendChild(dot);
