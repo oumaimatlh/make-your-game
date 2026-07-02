@@ -2,6 +2,10 @@ import { maze } from "./maze.js";
 import { pacManRender, pacManUpdate } from "./pacMan.js";
 import { state } from "./store.js";
 
+
+const startSound = new Audio("./assets/son.mp3");
+startSound.preload = "auto";
+startSound.volume = 0.5;
 const FPS = 60;
 const FRAME_DURATION = 1000 / FPS; 
 const MAX_ACCUMULATOR = FRAME_DURATION * 5; 
@@ -28,8 +32,10 @@ playBtn.addEventListener('click', () => {
     state.status = 'playing';
     startScreen.classList.add('hidden');
     pauseBtn.classList.remove('hidden');
-});
 
+    startSound.currentTime = 0;
+    startSound.play().catch(() => {});
+});
 continueBtn.addEventListener('click', () => togglePause());
 pauseBtn.addEventListener('click', () => togglePause());
 
