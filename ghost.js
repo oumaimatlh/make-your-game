@@ -11,7 +11,137 @@ function getGhostColor(color) {
   return ghostColors[color] || color || "#ff1d87";
 }
 
-export function ghostUpdate() {}
+function getDirectionDelta(direction) {
+  switch (direction) {
+    case "ArrowRight":
+    case "right":
+      return { row: 0, col: 1 };
+    case "ArrowLeft":
+    case "left":
+      return { row: 0, col: -1 };
+    case "ArrowUp":
+    case "up":
+      return { row: -1, col: 0 };
+    case "ArrowDown":
+    case "down":
+      return { row: 1, col: 0 };
+    default:
+      return { row: 0, col: 0 };
+  }
+}
+
+function canMoveTo(ghost, direction) {
+  const delta = getDirectionDelta(direction);
+
+  let newRow = ghost.row + delta.row;
+  let newCol = ghost.col + delta.col;
+
+  if (newCol < 0) newCol = maze[0].length - 1;
+  else if (newCol >= maze[0].length) newCol = 0;
+
+  if (newRow < 0 || newRow >= maze.length) return false;
+
+  const tile = maze[newRow][newCol];
+
+  if (tile === 1) return false;
+
+  if (tile === 7 && ghost.hasLeftHouse) return false;
+
+  return true;
+}
+
+function getOppositeDirection(direction) {
+  switch (direction) {
+    case "ArrowRight":
+    case "right":
+      return "left";
+    case "ArrowLeft":
+    case "left":
+      return "right";
+    case "ArrowUp":
+    case "up":
+      return "down";
+    case "ArrowDown":
+    case "down":
+      return "up";
+    default:
+      return null;
+  }
+}
+
+function chooseNextDirection(ghost) {
+  const directions = ["up", "down", "left", "right"];
+  const opposite = getOppositeDirection(ghost.direction);
+
+  let validDirections = directions.filter((direction) =>
+    canMoveTo(ghost, direction),
+  );
+
+  if (validDirections.length === 0) return null;
+  if (validDirections.length > 1 && opposite) {
+    validDirections = validDirections.filter(
+      (direction) => direction !== opposite,
+    );
+  }
+
+  if (
+    ghost.direction &&
+    validDirections.includes(ghost.direction) &&
+    Math.random() < 0.7
+  ) {
+    return ghost.direction;
+  }
+
+  // 2 choose paths randomly
+  return validDirections[Math.floor(Math.random() * validDirections.length)];
+}
+
+export function ghostUpdate() {
+  state.ghosts.forEach((ghost) => {
+    if (ghost.startupTimer < ghost.startupDelay) {
+      ghost.startupTimer += state.deltaTime * 1000;
+      return;
+    }
+
+    ghost.moveTimer += state.deltaTime * 1000;
+
+    if (ghost.moveTimer < ghost.moveDelay) return;
+
+    ghost.moveTimer = 0;
+
+   if (!ghost.hasLeftHouse) {
+     if (ghost.row > 8) {
+       ghost.direction = "up";
+       ghost.row--;
+       return;
+     }
+
+     ghost.hasLeftHouse = true;
+     ghost.direction = "left"; 
+   }
+
+
+    const nextDirection = chooseNextDirection(ghost);
+
+    if (!nextDirection) return;
+
+    const delta = getDirectionDelta(nextDirection);
+
+    let newRow = ghost.row + delta.row;
+    let newCol = ghost.col + delta.col;
+
+    if (newCol < 0) newCol = maze[0].length - 1;
+    else if (newCol >= maze[0].length) newCol = 0;
+
+    if (newRow < 0 || newRow >= maze.length || maze[newRow][newCol] === 1) {
+      return;
+    }
+
+    ghost.direction = nextDirection;
+    ghost.row = newRow;
+    ghost.col = newCol;
+  });
+}
 
 export function ghostRender() {
   document
@@ -29,6 +159,7 @@ export function ghostRender() {
 
     const ghostDiv = document.createElement("div");
     ghostDiv.className = "ghost-container";
+    ghostDiv.style.transform = `scale(${ghost.size})`;
 
     ghostDiv.innerHTML = `
       <svg viewBox="0 0 14 14" style="shape-rendering: crispEdges; width: 100%; height: 100%;">
