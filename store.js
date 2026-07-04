@@ -5,15 +5,20 @@ export var state = {
     direction: null,
     moveTimer: 0,
     moveDelay: 110,
-  },
+    },
+    
   ghosts: [
     {
       row: 9,
-      col: 7,
-      direction: "left",
+      col: 9,
+      direction: null,
       color: "pink",
       moveTimer: 0,
       moveDelay: 150,
+      startupTimer: 0,
+      startupDelay: 3000,
+      hasLeftHouse: false,
+      size: 1,
     },
   ],
 
