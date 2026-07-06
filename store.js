@@ -11,6 +11,8 @@ export var state = {
     {
       row: 9,
       col: 9,
+      startRow: 9,
+      startCol: 9,
       direction: null,
       color: "pink",
       moveTimer: 0,
@@ -23,6 +25,8 @@ export var state = {
     {
       row: 9,
       col: 8,
+      startRow: 9,
+      startCol: 8,
       direction: null,
       color: "cyan",
       moveTimer: 0,
@@ -35,6 +39,8 @@ export var state = {
     {
       row: 9,
       col: 10,
+      startRow: 9,
+      startCol: 10,
       direction: null,
       color: "orange",
       moveTimer: 0,
@@ -48,6 +54,7 @@ export var state = {
 
   score: 0,
   lives: 3,
+  hitDelay: 0,
   lastTime: 0,
   deltaTime: 0,
   status: "start",
