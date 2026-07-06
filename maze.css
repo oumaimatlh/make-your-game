@@ -199,8 +199,11 @@ body {
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 24px;
+  text-align: center;
   z-index: 100;
   transition: opacity 0.4s ease;
 }
