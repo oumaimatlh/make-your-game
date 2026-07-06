@@ -109,17 +109,19 @@ export function ghostUpdate() {
 
     ghost.moveTimer = 0;
 
-   if (!ghost.hasLeftHouse) {
-     if (ghost.row > 8) {
-       ghost.direction = "up";
-       ghost.row--;
-       return;
-     }
+    if (!ghost.hasLeftHouse) {
+      const isInHouse =
+        ghost.row >= 8 && ghost.row <= 9 && ghost.col >= 8 && ghost.col <= 10;
 
-     ghost.hasLeftHouse = true;
-     ghost.direction = "left"; 
-   }
+      if (isInHouse) {
+        ghost.direction = "up";
+        ghost.row--;
+        return;
+      }
 
+      ghost.hasLeftHouse = true;
+      ghost.direction = "left";
+    }
 
     const nextDirection = chooseNextDirection(ghost);
 
@@ -161,6 +163,10 @@ export function ghostRender() {
     ghostDiv.className = "ghost-container";
     ghostDiv.style.transform = `scale(${ghost.size})`;
 
+    if (!ghost.hasLeftHouse) {
+       ghostDiv.style.marginLeft = "5px";
+    }
+    
     ghostDiv.innerHTML = `
       <svg viewBox="0 0 14 14" style="shape-rendering: crispEdges; width: 100%; height: 100%;">
         <path fill="${getGhostColor(ghost.color)}" d="M4,0h6v1h2v1h1v1h1v7h-1v1h-1v2h-1v-1h-1v-1h-1v1h-2v-1h-1v1h-1v1H2v-2H1v-1H0V3h1V2h1V1h2V0z"/>
