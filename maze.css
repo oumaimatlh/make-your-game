@@ -1,65 +1,72 @@
 :root {
-    --cell-size: clamp(16px, 4.6vw, 36px);
-    --path-cell-height: clamp(22px, 6.6vw, 55px); /* Hauteur personnalisée pour les paths */
+  --cell-size: clamp(16px, 4.6vw, 36px);
+  --path-cell-height: clamp(
+    22px,
+    6.6vw,
+    55px
+  ); /* Hauteur personnalisée pour les paths */
 
-    --bg-dark: #0a0a0c;
-    --wall-color: #121216;
-    --luxury-gold: #d4af37;
-    --gold-glow: rgba(212, 175, 55, 0.3);
-    --path-color: #0d0d11;
+  --bg-dark: #0a0a0c;
+  --wall-color: #121216;
+  --luxury-gold: #d4af37;
+  --gold-glow: rgba(212, 175, 55, 0.3);
+  --path-color: #0d0d11;
 }
 
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
-html, body {
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden; /* évite tout scroll horizontal parasite sur mobile */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* évite tout scroll horizontal parasite sur mobile */
 }
 
 body {
-    background: radial-gradient(circle at center, #16161d 0%, #060608 100%);
-    min-height: 100vh;
-    min-height: 100dvh; /* meilleure gestion mobile (barres d'adresse) */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: '-apple-system', BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    padding: 12px; /* évite que le maze touche les bords sur petit écran */
+  background: radial-gradient(circle at center, #16161d 0%, #060608 100%);
+  min-height: 100vh;
+  min-height: 100dvh; /* meilleure gestion mobile (barres d'adresse) */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family:
+    "-apple-system", BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  padding: 12px; /* évite que le maze touche les bords sur petit écran */
 }
 
 #maze {
-    display: grid;
-    grid-template-columns: repeat(19, var(--cell-size));
-    grid-template-rows: repeat(19, var(--cell-size));
-    background-color: var(--path-color);
-    padding: clamp(6px, 1.6vw, 12px);
-    border-radius: clamp(8px, 2vw, 16px);
-    border: 2px solid rgb(159, 76, 236);
-    box-shadow: 0 0 8px rgb(159, 76, 236);
-    gap: 0; /* important */
-    max-width: 100%;
-    max-height: 100dvh;
+  display: grid;
+  grid-template-columns: repeat(19, var(--cell-size));
+  grid-template-rows: repeat(19, var(--cell-size));
+  background-color: var(--path-color);
+  padding: clamp(6px, 1.6vw, 12px);
+  border-radius: clamp(8px, 2vw, 16px);
+  border: 2px solid rgb(159, 76, 236);
+  box-shadow: 0 0 8px rgb(159, 76, 236);
+  gap: 0; /* important */
+  max-width: 100%;
+  max-height: 100dvh;
 }
 
 .cell {
-    width: var(--cell-size);
-    height: var(--cell-size);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-sizing: border-box;
-    position: relative;
+  width: var(--cell-size);
+  height: var(--cell-size);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  position: relative;
 }
 
 .path {
-    background: var(--path-color);
-    height: var(--path-cell-height) !important; /* Hauteur augmentée */
-    align-self: center; /* Centre verticalement */
-    z-index: 2;
+  background: var(--path-color);
+  height: var(--path-cell-height) !important; /* Hauteur augmentée */
+  align-self: center; /* Centre verticalement */
+  z-index: 2;
 }
 
 /* Pour que le contenu (pacman, dots, etc.) reste bien centré */
@@ -68,106 +75,114 @@ body {
 .path .dot-cell,
 .path #pacman-container,
 .path .pac-dot {
-    height: 100%;
-    width: 100%;
+  height: 100%;
+  width: 100%;
 }
 
 /* Wall reste normal */
 .wall {
-    background: var(--wall-color);
-    position: relative;
+  background: var(--wall-color);
+  position: relative;
 }
 
 .wall::after {
-    content: '';
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    right: 2px;
-    bottom: 2px;
-    background: #18181f;
-    border-radius: 4px;
-    border: 1px solid rgba(255, 255, 255, 0.03);
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  background: #18181f;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
 }
 
 .door {
-    background: var(--path-color);
-    position: relative;
+  background: var(--path-color);
+  position: relative;
 }
 
 .door::before {
-    content: '';
-    width: 100%;
-    height: 3px;
-    background: rgb(159, 76, 236);
-    box-shadow: 0 0 8px var(--luxury-gold);
-    border-radius: 2px;
+  content: "";
+  width: 100%;
+  height: 3px;
+  background: rgb(159, 76, 236);
+  box-shadow: 0 0 8px var(--luxury-gold);
+  border-radius: 2px;
 }
 
 .pacman-cell,
 .ghost-cell,
 .dot-cell {
-    background: transparent;
+  background: transparent;
 }
 
 /* ====================== PACMAN & GHOST ====================== */
 
 #pacman-container {
-    width: 75%;
-    height: 75%;
-    filter: drop-shadow(0 2px 8px var(--gold-glow));
-    transition: transform 0.2s ease;
+  width: 75%;
+  height: 75%;
+  filter: drop-shadow(0 2px 8px var(--gold-glow));
+  transition: transform 0.2s ease;
 }
 
 #pacman-container svg path {
-    fill: yellow !important;
+  fill: yellow !important;
 }
 
-
 .ghost-container {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .ghost-container svg {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 }
 
-.pac-dot{
-    position:absolute;
+.pac-dot {
+  position: absolute;
 
-    inset:0;
+  inset: 0;
 
-    display:flex;
-    justify-content:center;
-    align-items:center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    pointer-events:none;
+  pointer-events: none;
 }
 
 .pac-dot svg {
-    width: 50%;
-    height: 50%;
-    filter: drop-shadow(0 0 4px rgb(1, 24, 54));
-    animation: dot-glow 1.8s ease-in-out infinite;
+  width: 50%;
+  height: 50%;
+  filter: drop-shadow(0 0 4px rgb(1, 24, 54));
+  animation: dot-glow 1.8s ease-in-out infinite;
 }
 
 .pac-dot svg circle {
-    fill:#fffff6!important;
-    stroke :#fff0ed ;
+  fill: #fffff6 !important;
+  stroke: #fff0ed;
 }
 
 @keyframes dot-glow {
-    0%, 100% { opacity: .75; transform: scale(.9); }
-    50% { opacity: 1; transform: scale(1); }
+  0%,
+  100% {
+    opacity: 0.75;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .pac-dot svg { animation: none; }
+  .pac-dot svg {
+    animation: none;
+  }
 }
 
 /* ===========================
@@ -175,71 +190,74 @@ body {
 =========================== */
 
 .overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(10, 10, 12, 0.6);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 100;
-    transition: opacity 0.4s ease;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 10, 12, 0.6);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  transition: opacity 0.4s ease;
 }
 
 .overlay.hidden {
-    display: none;
+  display: none;
 }
 .hidden {
-    display: none !important;
+  display: none !important;
 }
 .overlay button {
-    padding: clamp(12px, 3vw, 16px) clamp(28px, 8vw, 50px);
-    font-size: clamp(13px, 3vw, 16px);
-    font-weight: 500;
-    letter-spacing: clamp(2px, 1vw, 5px);
-    text-transform: uppercase;
-    background: rgba(255, 255, 255, 0.03);
-    color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 1px;
-    cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: clamp(12px, 3vw, 16px) clamp(28px, 8vw, 50px);
+  font-size: clamp(13px, 3vw, 16px);
+  font-weight: 500;
+  letter-spacing: clamp(2px, 1vw, 5px);
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.03);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 1px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .overlay button:hover {
-    background: #ffffff;
-    color: #000000;
-    border-color: #ffffff;
-    letter-spacing: clamp(3px, 1.4vw, 7px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+  letter-spacing: clamp(3px, 1.4vw, 7px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
 #pause-btn {
-    position: fixed;
-    top: clamp(10px, 3vw, 30px);
-    right: clamp(10px, 3vw, 30px);
-    padding: clamp(6px, 1.8vw, 8px) clamp(14px, 4vw, 24px);
-    font-size: clamp(9px, 2.4vw, 11px);
-    font-weight: 600;
-    letter-spacing: clamp(1px, 0.6vw, 3px);
-    text-transform: uppercase;
-    background: transparent;
-    color: rgba(255, 255, 255, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 1px;
-    cursor: pointer;
-    z-index: 50;
-    transition: all 0.3s ease;
+  position: fixed;
+  top: clamp(10px, 3vw, 30px);
+  right: clamp(10px, 3vw, 30px);
+  padding: clamp(6px, 1.8vw, 8px) clamp(14px, 4vw, 24px);
+  font-size: clamp(9px, 2.4vw, 11px);
+  font-weight: 600;
+  letter-spacing: clamp(1px, 0.6vw, 3px);
+  text-transform: uppercase;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1px;
+  cursor: pointer;
+  z-index: 50;
+  transition: all 0.3s ease;
 }
 
 #pause-btn:hover {
-    color: #ffffff;
-    border-color: rgba(255, 255, 255, 0.4);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.4);
 }
 
 #pause-btn.hidden {
-    display: none !important;
+  display: none !important;
 }
 
 /* ==========================================================================
@@ -247,298 +265,305 @@ body {
    ========================================================================== */
 
 #game-header {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: min(calc(19 * var(--cell-size) + 24px), 95vw); /* S'aligne parfaitement sur la largeur du labyrinthe */
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    background: rgba(10, 10, 14, 0.65);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(159, 76, 236, 0.2);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), 
-                0 0 15px rgba(159, 76, 236, 0.05);
-    border-radius: 12px;
-    padding: 12px 24px;
-    box-sizing: border-box;
-    z-index: 90;
-    pointer-events: auto;
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(
+    calc(19 * var(--cell-size) + 24px),
+    95vw
+  ); /* S'aligne parfaitement sur la largeur du labyrinthe */
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  background: rgba(10, 10, 14, 0.65);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(159, 76, 236, 0.2);
+  box-shadow:
+    0 8px 32px 0 rgba(0, 0, 0, 0.4),
+    0 0 15px rgba(159, 76, 236, 0.05);
+  border-radius: 12px;
+  padding: 12px 24px;
+  box-sizing: border-box;
+  z-index: 90;
+  pointer-events: auto;
 }
 
 .hud-item {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 #game-header .hud-item:nth-child(1) {
-    align-items: flex-start; 
+  align-items: flex-start;
 }
 
 #game-header .hud-item:nth-child(3) {
-    align-items: flex-end;
+  align-items: flex-end;
 }
 
 .hud-center-group {
-    grid-column: 2;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
 }
 
 .hud-label {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.4);
-    font-family: system-ui, -apple-system, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  font-family:
+    system-ui,
+    -apple-system,
+    sans-serif;
 }
 
 .hud-value {
-    font-size: 22px;
-    font-weight: 800;
-    color: var(--luxury-gold);
-    text-shadow: 0 0 12px var(--gold-glow);
-    font-variant-numeric: tabular-nums; /* Évite que les chiffres bougent pendant le décompte */
-    letter-spacing: 0.5px;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--luxury-gold);
+  text-shadow: 0 0 12px var(--gold-glow);
+  font-variant-numeric: tabular-nums; /* Évite que les chiffres bougent pendant le décompte */
+  letter-spacing: 0.5px;
 }
 
 #lives-value {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(255, 255, 255, 0.03);
-    padding: 4px 10px;
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .life-icon {
-    width: 16px;
-    height: 16px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    filter: drop-shadow(0 0 4px rgba(255, 255, 0, 0.5));
-    transition: transform 0.3s ease;
+  width: 16px;
+  height: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 4px rgba(255, 255, 0, 0.5));
+  transition: transform 0.3s ease;
 }
 
 .life-icon:hover {
-    transform: scale(1.15);
+  transform: scale(1.15);
 }
 /* ==========================================================================
    GAME HEADER - MODERN HORIZONTAL
    ========================================================================== */
 
 #game-header {
-    position: fixed;
-    top: 18px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: min(calc(19 * var(--cell-size) + 40px), 94vw);
-    max-width: 94vw;
+  position: fixed;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(calc(19 * var(--cell-size) + 40px), 94vw);
+  max-width: 94vw;
 
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
 
-    /* Glassmorphism moderne */
-    background: rgba(15, 15, 25, 0.78);
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
-    
-    border: 1px solid rgba(159, 76, 236, 0.35);
-    border-radius: 20px;
-    padding: 12px 24px;
-    
-    box-shadow: 
-        0 12px 40px rgba(0, 0, 0, 0.45),
-        0 0 25px rgba(159, 76, 236, 0.12);
-    
-    z-index: 90;
-    box-sizing: border-box;
+  /* Glassmorphism moderne */
+  background: rgba(15, 15, 25, 0.78);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+
+  border: 1px solid rgba(159, 76, 236, 0.35);
+  border-radius: 20px;
+  padding: 12px 24px;
+
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.45),
+    0 0 25px rgba(159, 76, 236, 0.12);
+
+  z-index: 90;
+  box-sizing: border-box;
 }
 
 /* Chaque bloc */
 .hud-block {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 /* Score */
 .score-block {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 /* Lives */
 #lives-block {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 /* Labels */
 .hud-label {
-    font-family: system-ui, sans-serif;
-    font-size: 10.5px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.6);
-    white-space: nowrap;
+  font-family: system-ui, sans-serif;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  white-space: nowrap;
 }
 
 /* Valeurs */
 .hud-value {
-    font-family: system-ui, sans-serif;
-    font-size: 26px;
-    font-weight: 800;
-    color: #ffffff;
-    text-shadow: 0 0 12px rgba(159, 76, 236, 0.5);
+  font-family: system-ui, sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  color: #ffffff;
+  text-shadow: 0 0 12px rgba(159, 76, 236, 0.5);
 }
 
 /* Lives Icons */
 #lives-value {
-    display: flex;
-    align-items: center;
-    gap: 7px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
 }
 
 .life-icon {
-    width: 21px;
-    height: 21px;
-    filter: drop-shadow(0 0 6px var(--luxury-gold));
-    transition: transform 0.25s ease;
+  width: 21px;
+  height: 21px;
+  filter: drop-shadow(0 0 6px var(--luxury-gold));
+  transition: transform 0.25s ease;
 }
 
 .life-icon:hover {
-    transform: scale(1.2);
+  transform: scale(1.2);
 }
 
 /* Pause Button */
 #pause-btn {
-    all: unset;
-    font-family: system-ui, sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    padding: 9px 20px;
-    color: white;
-    background: rgba(159, 76, 236, 0.18);
-    border: 1px solid rgba(159, 76, 236, 0.5);
-    border-radius: 14px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    white-space: nowrap;
+  all: unset;
+  font-family: system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  padding: 9px 20px;
+  color: white;
+  background: rgba(159, 76, 236, 0.18);
+  border: 1px solid rgba(159, 76, 236, 0.5);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
 }
 
 #pause-btn:hover {
-    background: rgb(159, 76, 236);
-    color: #000;
-    transform: translateY(-1px);
-    box-shadow: 0 8px 20px rgba(159, 76, 236, 0.4);
+  background: rgb(159, 76, 236);
+  color: #000;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(159, 76, 236, 0.4);
 }
 
 /* Espacement body */
 body {
-    padding-top: 105px;
+  padding-top: 105px;
 }
 /* Style de l'écran de démarrage */
 #start-screen {
-    background-color: #0000005e; /* Fond noir obligatoire pour l'ambiance arcade */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    font-family: 'Press Start 2P', cursive; /* Application de la police rétro */
+  background-color: #0000005e; /* Fond noir obligatoire pour l'ambiance arcade */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-family: "Press Start 2P", cursive; /* Application de la police rétro */
 }
 
 /* Design du Titre PAC-MAN */
 .pacman-title {
-    color: #FFD700; /* Jaune Pac-Man classique */
-    font-size: 4rem; /* Gros titre */
-    margin-bottom: 40px;
-    letter-spacing: 8px;
-    text-transform: uppercase;
-    
-    /* Effet d'ombre rétro (style 3D block) et lueur bleue comme le labyrinthe */
-    text-shadow: 
-        3px 3px 0px #000, 
-        6px 6px 0px #2121DE, /* Bleu néon des murs de Pac-Man */
-        0px 0px 20px rgba(33, 33, 222, 0.8);
-        
-    animation: pulse 1.5s infinite alternate; /* Petite animation de pulsation */
+  color: #ffd700; /* Jaune Pac-Man classique */
+  font-size: 4rem; /* Gros titre */
+  margin-bottom: 40px;
+  letter-spacing: 8px;
+  text-transform: uppercase;
+
+  /* Effet d'ombre rétro (style 3D block) et lueur bleue comme le labyrinthe */
+  text-shadow:
+    3px 3px 0px #000,
+    6px 6px 0px #2121de,
+    /* Bleu néon des murs de Pac-Man */ 0px 0px 20px rgba(33, 33, 222, 0.8);
+
+  animation: pulse 1.5s infinite alternate; /* Petite animation de pulsation */
 }
 
 /* Design du Bouton PLAY assorti */
 #play-btn {
-    font-family: 'Press Start 2P', cursive;
-    font-size: 1.5rem;
-    background-color: transparent;
-    color: #e781a0; 
-    
-    background: rgba(15, 15, 24, 0.774);
-    border-radius: 5px;
-    backdrop-filter: blur(20px) saturate(180%);
-    padding: 15px 30px;
-    cursor: pointer;
-    transition: all 0.2s ease;
+  font-family: "Press Start 2P", cursive;
+  font-size: 1.5rem;
+  background-color: transparent;
+  color: #e781a0;
+
+  background: rgba(15, 15, 24, 0.774);
+  border-radius: 5px;
+  backdrop-filter: blur(20px) saturate(180%);
+  padding: 15px 30px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 #play-btn:hover {
-    background-color: #fd2d6c;
-    color: #000;
-    box-shadow: 0 0 15px #FF0000;
+  background-color: #fd2d6c;
+  color: #000;
+  box-shadow: 0 0 15px #ff0000;
 }
 
 /* Animation de pulsation pour le titre */
 @keyframes pulse {
-    from {
-        transform: scale(1);
-    }
-    to {
-        transform: scale(1.05);
-    }
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.05);
+  }
 }
 @media (max-width: 520px) {
-    #game-header {
-        padding: 11px 18px;
-        gap: 12px;
-    }
-    
-    .hud-value {
-        font-size: 23px;
-    }
-    
-    #pause-btn {
-        padding: 8px 16px;
-        font-size: 12px;
-    }
+  #game-header {
+    padding: 11px 18px;
+    gap: 12px;
+  }
+
+  .hud-value {
+    font-size: 23px;
+  }
+
+  #pause-btn {
+    padding: 8px 16px;
+    font-size: 12px;
+  }
 }
 
 @media (max-width: 380px) {
-    #game-header {
-        padding: 10px 14px;
-        gap: 10px;
-    }
+  #game-header {
+    padding: 10px 14px;
+    gap: 10px;
+  }
 }
 /* Sécurité supplémentaire sur très petits écrans (ex: iPhone SE) */
 @media (max-width: 380px) {
-    :root {
-        --cell-size: clamp(14px, 4.8vw, 20px);
-        --path-cell-height: clamp(18px, 6.8vw, 26px);
-    }
-    body {
-        padding: 6px;
-    }
+  :root {
+    --cell-size: clamp(14px, 4.8vw, 20px);
+    --path-cell-height: clamp(18px, 6.8vw, 26px);
+  }
+  body {
+    padding: 6px;
+  }
 }
