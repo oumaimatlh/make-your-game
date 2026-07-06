@@ -46,7 +46,8 @@ body {
   padding: clamp(6px, 1.6vw, 12px);
   border-radius: clamp(8px, 2vw, 16px);
   border: 2px solid rgb(159, 76, 236);
-  box-shadow: 0 0 8px rgb(159, 76, 236);
+  /* removed heavy glow for performance */
+  box-shadow: none;
   gap: 0; /* important */
   max-width: 100%;
   max-height: 100dvh;
@@ -122,8 +123,8 @@ body {
 #pacman-container {
   width: 75%;
   height: 75%;
-  filter: drop-shadow(0 2px 8px var(--gold-glow));
-  transition: transform 0.2s ease;
+  filter: none;
+  transition: transform 0.12s linear;
 }
 
 #pacman-container svg path {
@@ -158,8 +159,8 @@ body {
 .pac-dot svg {
   width: 50%;
   height: 50%;
-  filter: drop-shadow(0 0 4px rgb(1, 24, 54));
-  animation: dot-glow 1.8s ease-in-out infinite;
+  filter: none;
+  animation: none;
 }
 
 .pac-dot svg circle {
@@ -184,10 +185,6 @@ body {
     animation: none;
   }
 }
-
-/* ===========================
-   OVERLAYS & MENUS
-=========================== */
 
 .overlay {
   position: fixed;
