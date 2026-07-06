@@ -5,8 +5,8 @@ export var state = {
     direction: null,
     moveTimer: 0,
     moveDelay: 110,
-    },
-    
+  },
+
   ghosts: [
     {
       row: 9,
@@ -18,7 +18,31 @@ export var state = {
       startupTimer: 0,
       startupDelay: 3000,
       hasLeftHouse: false,
-      size: 1,
+      size: 1.1,
+    },
+    {
+      row: 9,
+      col: 8,
+      direction: null,
+      color: "cyan",
+      moveTimer: 0,
+      moveDelay: 170,
+      startupTimer: 0,
+      startupDelay: 1800,
+      hasLeftHouse: false,
+      size: 1.1,
+    },
+    {
+      row: 9,
+      col: 10,
+      direction: null,
+      color: "orange",
+      moveTimer: 0,
+      moveDelay: 190,
+      startupTimer: 0,
+      startupDelay: 2400,
+      hasLeftHouse: false,
+      size: 1.1,
     },
   ],
 
