@@ -1,4 +1,4 @@
-import { maze } from "./maze.js";
+import { maze, restoreMaze, rebuildMaze } from "./maze.js";
 import { pacManRender, pacManUpdate } from "./pacMan.js";
 import { ghostRender, ghostUpdate } from "./ghost.js";
 import { renderHUD } from "./hud.js";
@@ -11,13 +11,17 @@ const FPS = 60;
 const FRAME_DURATION = 1000 / FPS;
 const MAX_ACCUMULATOR = FRAME_DURATION * 5;
 
+// FPS counter removed
+
 const startScreen = document.getElementById("start-screen");
 const pauseScreen = document.getElementById("pause-screen");
 const playBtn = document.getElementById("play-btn");
 const continueBtn = document.getElementById("continue-btn");
 const pauseBtn = document.getElementById("pause-btn");
 const gameOverScreen = document.getElementById("gameover-screen");
+const winScreen = document.getElementById("win-screen");
 const restartBtn = document.getElementById("restart-btn");
+const playAgainBtn = document.getElementById("play-again-btn");
 
 function togglePause() {
   if (state.status === "playing") {
@@ -43,6 +47,13 @@ continueBtn.addEventListener("click", () => togglePause());
 pauseBtn.addEventListener("click", () => togglePause());
 restartBtn.addEventListener("click", () => {
   hideGameOver();
+  hideWin();
+  resetFullGame();
+  state.status = "playing";
+});
+
+playAgainBtn.addEventListener("click", () => {
+  hideWin();
   resetFullGame();
   state.status = "playing";
 });
@@ -52,6 +63,8 @@ window.addEventListener("keydown", (event) => {
     event.preventDefault();
     if (state.status === "playing") {
       state.pacMan.direction = event.key;
+      // force immediate movement on key press for responsiveness
+      state.pacMan.moveTimer = state.pacMan.moveDelay;
     }
   }
 
@@ -65,11 +78,29 @@ window.addEventListener("keydown", (event) => {
 
 function showGameOver() {
   state.status = "gameover";
+  hideWin();
   gameOverScreen.classList.remove("hidden");
 }
 
 function hideGameOver() {
   gameOverScreen.classList.add("hidden");
+}
+
+function showWin() {
+  state.status = "won";
+  winScreen.classList.remove("hidden");
+}
+
+function hideWin() {
+  winScreen.classList.add("hidden");
+}
+
+function checkWin() {
+  const dotsLeft = maze.flat().filter((cell) => cell === 6).length;
+
+  if (dotsLeft === 0) {
+    showWin();
+  }
 }
 
 function checkGhostCollisions() {
@@ -114,12 +145,17 @@ function resetFullGame() {
   state.lives = 3;
   state.hitDelay = 0;
   state.lastTime = 0;
+
+  restoreMaze();
+  rebuildMaze();
   resetRound();
+  pacManRender();
+  ghostRender();
   renderHUD();
 }
 
 function update() {
-  if (state.status === "gameover") return;
+  if (state.status === "gameover" || state.status === "won") return;
 
   if (state.hitDelay > 0) {
     state.hitDelay = Math.max(0, state.hitDelay - state.deltaTime);
@@ -134,6 +170,7 @@ function update() {
   pacManUpdate();
   ghostUpdate();
   checkGhostCollisions();
+  checkWin();
 }
 
 function render() {
