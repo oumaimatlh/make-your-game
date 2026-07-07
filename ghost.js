@@ -1,6 +1,8 @@
 import { maze } from "./maze.js";
 import { state } from "./store.js";
 
+const ghostElements = new Map();
+
 const ghostColors = {
   pink: "#ff1d87",
   cyan: "#00ffff",
@@ -145,28 +147,12 @@ export function ghostUpdate() {
   });
 }
 
-export function ghostRender() {
-  document
-    .querySelectorAll("#maze .ghost-container")
-    .forEach((ghost) => ghost.remove());
-
-  const cells = document.querySelectorAll("#maze .cell");
-  const columnCount = maze[0].length;
-
-  state.ghosts.forEach((ghost) => {
-    const index = ghost.row * columnCount + ghost.col;
-    const targetCell = cells[index];
-
-    if (!targetCell) return;
-
+function getGhostElement(ghost) {
+  if (!ghostElements.has(ghost)) {
     const ghostDiv = document.createElement("div");
     ghostDiv.className = "ghost-container";
-    ghostDiv.style.transform = `scale(${ghost.size})`;
-
-    if (!ghost.hasLeftHouse) {
-       ghostDiv.style.marginLeft = "5px";
-    }
-    
+    ghostDiv.style.width = "100%";
+    ghostDiv.style.height = "100%";
     ghostDiv.innerHTML = `
       <svg viewBox="0 0 14 14" style="shape-rendering: crispEdges; width: 100%; height: 100%;">
         <path fill="${getGhostColor(ghost.color)}" d="M4,0h6v1h2v1h1v1h1v7h-1v1h-1v2h-1v-1h-1v-1h-1v1h-2v-1h-1v1h-1v1H2v-2H1v-1H0V3h1V2h1V1h2V0z"/>
@@ -176,7 +162,31 @@ export function ghostRender() {
         <rect x="8" y="4" width="2" height="2" fill="#2121ff"/>
       </svg>
     `;
+    ghostElements.set(ghost, ghostDiv);
+  }
 
-    targetCell.appendChild(ghostDiv);
+  return ghostElements.get(ghost);
+}
+
+export function ghostRender() {
+  const cells = document.querySelectorAll("#maze .cell");
+  const columnCount = maze[0].length;
+
+  state.ghosts.forEach((ghost) => {
+    const index = ghost.row * columnCount + ghost.col;
+    const targetCell = cells[index];
+
+    if (!targetCell) return;
+
+    const ghostDiv = getGhostElement(ghost);
+    ghostDiv.style.transform = `scale(${ghost.size})`;
+    ghostDiv.style.marginLeft = !ghost.hasLeftHouse ? "5px" : "0";
+
+    if (ghostDiv.parentElement !== targetCell) {
+      if (ghostDiv.parentElement) {
+        ghostDiv.parentElement.removeChild(ghostDiv);
+      }
+      targetCell.appendChild(ghostDiv);
+    }
   });
 }
