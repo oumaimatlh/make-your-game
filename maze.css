@@ -211,6 +211,13 @@ body {
 .hidden {
   display: none !important;
 }
+#pause-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
 .overlay button {
   padding: clamp(12px, 3vw, 16px) clamp(28px, 8vw, 50px);
   font-size: clamp(13px, 3vw, 16px);
