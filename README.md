@@ -88,9 +88,10 @@ Then open the provided local URL in your browser and click on **maze.html**.
   - GitHub: https://github.com/KaoutarHammaoui
 
 - **Oumaima Talhaoui**
-  - GitHub: https://github.com/outalhaou
+  - GitHub: https://github.com/oumaimatlh
 
-
+## Hosting : 
+ - https://pacmanok.netlify.app/
 ## 📄 License
 
 This project was developed for educational purposes as part of the **Zone01 JavaScript** curriculum.
