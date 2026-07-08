@@ -17,6 +17,7 @@ const startScreen = document.getElementById("start-screen");
 const pauseScreen = document.getElementById("pause-screen");
 const playBtn = document.getElementById("play-btn");
 const continueBtn = document.getElementById("continue-btn");
+const restartGameBtn = document.getElementById("restart-game-btn");
 const pauseBtn = document.getElementById("pause-btn");
 const gameOverScreen = document.getElementById("gameover-screen");
 const winScreen = document.getElementById("win-screen");
@@ -44,6 +45,14 @@ playBtn.addEventListener("click", () => {
   startSound.play().catch(() => {});
 });
 continueBtn.addEventListener("click", () => togglePause());
+restartGameBtn.addEventListener("click", () => {
+  pauseScreen.classList.add("hidden");
+  pauseBtn.classList.remove("hidden");
+  hideGameOver();
+  hideWin();
+  resetFullGame();
+  state.status = "playing";
+});
 pauseBtn.addEventListener("click", () => togglePause());
 restartBtn.addEventListener("click", () => {
   hideGameOver();
