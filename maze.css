@@ -1,11 +1,11 @@
+/* ==========================================================================
+   1. VARIABLES & CONFIGURATION GLOBALE
+   ========================================================================== */
 :root {
-  --cell-size: clamp(16px, 4.6vw, 36px);
-  --path-cell-height: clamp(
-    22px,
-    6.6vw,
-    55px
-  ); /* Hauteur personnalisée pour les paths */
-
+  /* vmin garantit que les cellules restent des carrés parfaits et s'adaptent 
+     à la fois sur les écrans hauts (mobiles) et les écrans bas (paysage) */
+  --cell-size: clamp(14px, 4.2vmin, 34px);
+  
   --bg-dark: #0a0a0c;
   --wall-color: #121216;
   --luxury-gold: #d4af37;
@@ -21,36 +21,37 @@ html,
 body {
   margin: 0;
   padding: 0;
-  overflow-x: hidden; /* évite tout scroll horizontal parasite sur mobile */
+  overflow-x: hidden; /* Évite le scroll horizontal parasite */
 }
 
 body {
   background: radial-gradient(circle at center, #16161d 0%, #060608 100%);
   min-height: 100vh;
-  min-height: 100dvh; /* meilleure gestion mobile (barres d'adresse) */
+  min-height: 100dvh; /* Meilleure gestion des barres d'adresse mobiles */
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-family:
-    "-apple-system", BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
-    sans-serif;
+  font-family: "-apple-system", BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
-  padding: 12px; /* évite que le maze touche les bords sur petit écran */
+  padding: 12px;
+  padding-top: 100px; /* Espace de sécurité pour le HUD fixe */
 }
 
+/* ==========================================================================
+   2. LE LABYRINTHE (GRID SYSTEM)
+   ========================================================================== */
 #maze {
   display: grid;
   grid-template-columns: repeat(19, var(--cell-size));
   grid-template-rows: repeat(19, var(--cell-size));
   background-color: var(--path-color);
-  padding: clamp(6px, 1.6vw, 12px);
-  border-radius: clamp(8px, 2vw, 16px);
+  padding: clamp(6px, 1.5vmin, 12px);
+  border-radius: clamp(8px, 2vmin, 16px);
   border: 2px solid rgb(159, 76, 236);
-  /* removed heavy glow for performance */
-  box-shadow: none;
-  gap: 0; /* important */
+  gap: 0; /* Crucial pour coller les murs et les chemins */
   max-width: 100%;
-  max-height: 100dvh;
+  max-height: calc(100dvh - 120px); /* Empêche le labyrinthe de déborder sous l'écran */
 }
 
 .cell {
@@ -59,18 +60,16 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  box-sizing: border-box;
   position: relative;
 }
 
+/* Correction majeure : Les chemins doivent faire exactement la même taille que les cellules */
 .path {
   background: var(--path-color);
-  height: var(--path-cell-height) !important; /* Hauteur augmentée */
-  align-self: center; /* Centre verticalement */
   z-index: 2;
 }
 
-/* Pour que le contenu (pacman, dots, etc.) reste bien centré */
+/* Redimensionnement adaptatif des entités à l'intérieur des cellules */
 .path .pacman-cell,
 .path .ghost-cell,
 .path .dot-cell,
@@ -80,7 +79,7 @@ body {
   width: 100%;
 }
 
-/* Wall reste normal */
+/* Murs */
 .wall {
   background: var(--wall-color);
   position: relative;
@@ -98,9 +97,13 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.03);
 }
 
+/* Porte des fantômes */
 .door {
   background: var(--path-color);
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .door::before {
@@ -118,8 +121,9 @@ body {
   background: transparent;
 }
 
-/* ====================== PACMAN & GHOST ====================== */
-
+/* ==========================================================================
+   3. ENTITÉS (PACMAN, GHOSTS, DOTS)
+   ========================================================================== */
 #pacman-container {
   width: 75%;
   height: 75%;
@@ -146,13 +150,10 @@ body {
 
 .pac-dot {
   position: absolute;
-
   inset: 0;
-
   display: flex;
   justify-content: center;
   align-items: center;
-
   pointer-events: none;
 }
 
@@ -168,9 +169,9 @@ body {
   stroke: #fff0ed;
 }
 
+/* Animation optionnelle (désactivée par défaut pour les performances) */
 @keyframes dot-glow {
-  0%,
-  100% {
+  0%, 100% {
     opacity: 0.75;
     transform: scale(0.9);
   }
@@ -186,13 +187,108 @@ body {
   }
 }
 
+/* ==========================================================================
+   4. INTERFACE HUD / HEADER (SCORE, VIES, PAUSE)
+   ========================================================================== */
+#game-header {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(calc(19 * var(--cell-size) + 24px), 95vw);
+  max-width: 95vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  
+  /* Glassmorphism Moderne */
+  background: rgba(15, 15, 25, 0.82);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(159, 76, 236, 0.35);
+  border-radius: 16px;
+  padding: 10px 20px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45), 0 0 25px rgba(159, 76, 236, 0.12);
+  z-index: 90;
+  box-sizing: border-box;
+}
+
+.hud-block {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hud-label {
+  font-family: system-ui, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  white-space: nowrap;
+}
+
+.hud-value {
+  font-family: system-ui, sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: #ffffff;
+  text-shadow: 0 0 12px rgba(159, 76, 236, 0.5);
+  font-variant-numeric: tabular-nums; /* Empêche les sauts de texte lors du décompte */
+}
+
+#lives-value {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.life-icon {
+  width: 18px;
+  height: 18px;
+  filter: drop-shadow(0 0 5px var(--luxury-gold));
+  transition: transform 0.25s ease;
+}
+
+.life-icon:hover {
+  transform: scale(1.2);
+}
+
+#pause-btn {
+  all: unset;
+  font-family: system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 8px 16px;
+  color: white;
+  background: rgba(159, 76, 236, 0.18);
+  border: 1px solid rgba(159, 76, 236, 0.5);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+#pause-btn:hover {
+  background: rgb(159, 76, 236);
+  color: #000000;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 15px rgba(159, 76, 236, 0.4);
+}
+
+/* ==========================================================================
+   5. ÉCRANS D'OVERLAY (START, PAUSE, GAME OVER, WIN)
+   ========================================================================== */
 .overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(10, 10, 12, 0.6);
+  background: rgba(10, 10, 12, 0.75);
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   display: flex;
@@ -205,12 +301,40 @@ body {
   transition: opacity 0.4s ease;
 }
 
-.overlay.hidden {
-  display: none;
+#start-screen {
+  background-color: rgba(0, 0, 0, 0.85); /* Ambiance sombre Arcade */
+  font-family: "Press Start 2P", cursive;
 }
-.hidden {
-  display: none !important;
+
+.pacman-title {
+  color: #ffd700;
+  font-size: clamp(2rem, 8vw, 4rem); /* S'adapte à la taille de l'écran */
+  margin: 0 0 20px 0;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  text-shadow: 3px 3px 0px #000, 6px 6px 0px #2121de, 0px 0px 20px rgba(33, 33, 222, 0.8);
+  animation: pulse 1.5s infinite alternate;
 }
+
+#play-btn {
+  font-family: "Press Start 2P", cursive;
+  font-size: clamp(1rem, 4vw, 1.4rem);
+  background: rgba(15, 15, 24, 0.9);
+  color: #e781a0;
+  border: 2px solid #e781a0;
+  border-radius: 8px;
+  padding: 12px 28px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#play-btn:hover {
+  background-color: #fd2d6c;
+  color: #000000;
+  border-color: #fd2d6c;
+  box-shadow: 0 0 20px #ff0000;
+}
+
 #pause-actions {
   display: flex;
   gap: 16px;
@@ -218,381 +342,95 @@ body {
   justify-content: center;
 }
 
-.overlay button {
-  padding: clamp(12px, 3vw, 16px) clamp(28px, 8vw, 50px);
-  font-size: clamp(13px, 3vw, 16px);
-  font-weight: 500;
-  letter-spacing: clamp(2px, 1vw, 5px);
+.overlay button:not(#play-btn) {
+  padding: clamp(12px, 3vw, 16px) clamp(24px, 6vw, 40px);
+  font-size: clamp(12px, 2.5vw, 15px);
+  font-weight: 600;
+  letter-spacing: 2px;
   text-transform: uppercase;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.05);
   color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 1px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.overlay button:hover {
+.overlay button:not(#play-btn):hover {
   background: #ffffff;
   color: #000000;
   border-color: #ffffff;
-  letter-spacing: clamp(3px, 1.4vw, 7px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
 }
 
-#pause-btn {
-  position: fixed;
-  top: clamp(10px, 3vw, 30px);
-  right: clamp(10px, 3vw, 30px);
-  padding: clamp(6px, 1.8vw, 8px) clamp(14px, 4vw, 24px);
-  font-size: clamp(9px, 2.4vw, 11px);
-  font-weight: 600;
-  letter-spacing: clamp(1px, 0.6vw, 3px);
-  text-transform: uppercase;
-  background: transparent;
-  color: rgba(255, 255, 255, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 1px;
-  cursor: pointer;
-  z-index: 50;
-  transition: all 0.3s ease;
-}
-
-#pause-btn:hover {
-  color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.4);
-}
-
-#pause-btn.hidden {
+/* Classes utilitaires de masquage */
+.overlay.hidden,
+.hidden {
   display: none !important;
 }
 
 /* ==========================================================================
-   Nouveau HUD ÉLÉGANT & LUXUEUX (Score, Vies, Temps)
+   6. ANIMATIONS & REQUÊTES MÉDIA DE SÉCURITÉ (RESPONSIVE)
    ========================================================================== */
-
-#game-header {
-  position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(
-    calc(19 * var(--cell-size) + 24px),
-    95vw
-  ); /* S'aligne parfaitement sur la largeur du labyrinthe */
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  background: rgba(10, 10, 14, 0.65);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(159, 76, 236, 0.2);
-  box-shadow:
-    0 8px 32px 0 rgba(0, 0, 0, 0.4),
-    0 0 15px rgba(159, 76, 236, 0.05);
-  border-radius: 12px;
-  padding: 12px 24px;
-  box-sizing: border-box;
-  z-index: 90;
-  pointer-events: auto;
-}
-
-.hud-item {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-#game-header .hud-item:nth-child(1) {
-  align-items: flex-start;
-}
-
-#game-header .hud-item:nth-child(3) {
-  align-items: flex-end;
-}
-
-.hud-center-group {
-  grid-column: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-}
-
-.hud-label {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.4);
-  font-family:
-    system-ui,
-    -apple-system,
-    sans-serif;
-}
-
-.hud-value {
-  font-size: 22px;
-  font-weight: 800;
-  color: var(--luxury-gold);
-  text-shadow: 0 0 12px var(--gold-glow);
-  font-variant-numeric: tabular-nums; /* Évite que les chiffres bougent pendant le décompte */
-  letter-spacing: 0.5px;
-}
-
-#lives-value {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(255, 255, 255, 0.03);
-  padding: 4px 10px;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.life-icon {
-  width: 16px;
-  height: 16px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  filter: drop-shadow(0 0 4px rgba(255, 255, 0, 0.5));
-  transition: transform 0.3s ease;
-}
-
-.life-icon:hover {
-  transform: scale(1.15);
-}
-/* ==========================================================================
-   GAME HEADER - MODERN HORIZONTAL
-   ========================================================================== */
-
-#game-header {
-  position: fixed;
-  top: 18px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(calc(19 * var(--cell-size) + 40px), 94vw);
-  max-width: 94vw;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-
-  /* Glassmorphism moderne */
-  background: rgba(15, 15, 25, 0.78);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-
-  border: 1px solid rgba(159, 76, 236, 0.35);
-  border-radius: 20px;
-  padding: 12px 24px;
-
-  box-shadow:
-    0 12px 40px rgba(0, 0, 0, 0.45),
-    0 0 25px rgba(159, 76, 236, 0.12);
-
-  z-index: 90;
-  box-sizing: border-box;
-}
-
-/* Chaque bloc */
-.hud-block {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-/* Score */
-.score-block {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-/* Lives */
-#lives-block {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-/* Labels */
-.hud-label {
-  font-family: system-ui, sans-serif;
-  font-size: 10.5px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.6);
-  white-space: nowrap;
-}
-
-/* Valeurs */
-.hud-value {
-  font-family: system-ui, sans-serif;
-  font-size: 26px;
-  font-weight: 800;
-  color: #ffffff;
-  text-shadow: 0 0 12px rgba(159, 76, 236, 0.5);
-}
-
-/* Lives Icons */
-#lives-value {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
-
-.life-icon {
-  width: 21px;
-  height: 21px;
-  filter: drop-shadow(0 0 6px var(--luxury-gold));
-  transition: transform 0.25s ease;
-}
-
-.life-icon:hover {
-  transform: scale(1.2);
-}
-
-/* Pause Button */
-#pause-btn {
-  all: unset;
-  font-family: system-ui, sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  padding: 9px 20px;
-  color: white;
-  background: rgba(159, 76, 236, 0.18);
-  border: 1px solid rgba(159, 76, 236, 0.5);
-  border-radius: 14px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  white-space: nowrap;
-}
-
-#pause-btn:hover {
-  background: rgb(159, 76, 236);
-  color: #000;
-  transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgba(159, 76, 236, 0.4);
-}
-
-/* Espacement body */
-body {
-  padding-top: 105px;
-}
-/* Style de l'écran de démarrage */
-#start-screen {
-  background-color: #0000005e; /* Fond noir obligatoire pour l'ambiance arcade */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  font-family: "Press Start 2P", cursive; /* Application de la police rétro */
-}
-
-/* Design du Titre PAC-MAN */
-.pacman-title {
-  color: #ffd700; /* Jaune Pac-Man classique */
-  font-size: 4rem; /* Gros titre */
-  margin-bottom: 40px;
-  letter-spacing: 8px;
-  text-transform: uppercase;
-
-  /* Effet d'ombre rétro (style 3D block) et lueur bleue comme le labyrinthe */
-  text-shadow:
-    3px 3px 0px #000,
-    6px 6px 0px #2121de,
-    /* Bleu néon des murs de Pac-Man */ 0px 0px 20px rgba(33, 33, 222, 0.8);
-
-  animation: pulse 1.5s infinite alternate; /* Petite animation de pulsation */
-}
-
-/* Design du Bouton PLAY assorti */
-#play-btn {
-  font-family: "Press Start 2P", cursive;
-  font-size: 1.5rem;
-  background-color: transparent;
-  color: #e781a0;
-
-  background: rgba(15, 15, 24, 0.774);
-  border-radius: 5px;
-  backdrop-filter: blur(20px) saturate(180%);
-  padding: 15px 30px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-#play-btn:hover {
-  background-color: #fd2d6c;
-  color: #000;
-  box-shadow: 0 0 15px #ff0000;
-}
-
-/* Animation de pulsation pour le titre */
 @keyframes pulse {
-  from {
-    transform: scale(1);
-  }
-  to {
-    transform: scale(1.05);
-  }
-}
-@media (max-width: 520px) {
-  #game-header {
-    padding: 11px 18px;
-    gap: 12px;
-  }
-
-  .hud-value {
-    font-size: 23px;
-  }
-
-  #pause-btn {
-    padding: 8px 16px;
-    font-size: 12px;
-  }
+  from { transform: scale(1); }
+  to { transform: scale(1.04); }
 }
 
-@media (max-width: 380px) {
-  #game-header {
-    padding: 10px 14px;
-    gap: 10px;
-  }
-}
-/* Sécurité supplémentaire sur très petits écrans (ex: iPhone SE) */
-@media (max-width: 380px) {
-  :root {
-    --cell-size: clamp(14px, 4.8vw, 20px);
-    --path-cell-height: clamp(18px, 6.8vw, 26px);
-  }
-  body {
-    padding: 6px;
-  }
-}
-
-@keyframes animate {
-  0% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-4px);
-  }
-
-  100% {
-    transform: translateY(0);
-  }
+@keyframes footer-animate {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
 }
 
 footer {
   width: 10px;
   height: 10px;
-  /* color: transparent; */
-  animation: animate 1s ease-in infinite;
+  color: transparent;
+  animation: footer-animate 1s ease-in infinite;
+}
 
+/* --- RESPONSIVE : SMARTPHONES TRÈS ÉTROITS (< 400px) --- */
+@media (max-width: 400px) {
+  :root {
+    --cell-size: clamp(11px, 4.4vw, 15px);
+  }
+  body {
+    padding-top: 76px;
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+  #game-header {
+    padding: 6px 12px;
+    gap: 8px;
+    border-radius: 10px;
+  }
+  .hud-value {
+    font-size: 16px;
+  }
+  .hud-label {
+    font-size: 8px;
+    letter-spacing: 0.5px;
+  }
+  #pause-btn {
+    font-size: 10px;
+    padding: 6px 10px;
+  }
+}
+
+/* --- RESPONSIVE : MOBILES EN MODE PAYSAGE / LOW HEIGHT (< 520px) --- */
+@media (max-height: 520px) {
+  body {
+    padding-top: 64px;
+    padding-bottom: 4px;
+  }
+  #game-header {
+    top: 6px;
+    padding: 6px 14px;
+  }
+  .hud-value {
+    font-size: 15px;
+  }
+  #maze {
+    max-height: calc(100dvh - 75px);
+  }
 }
