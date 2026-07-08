@@ -567,3 +567,24 @@ body {
     padding: 6px;
   }
 }
+
+@keyframes animate {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+footer {
+  width: 100px;
+  height: 100px;
+  color: #2121de;
+  animation: animate 1s ease-in infinite;
+}

@@ -4,7 +4,7 @@ export var state = {
     col: 9,
     direction: null,
     moveTimer: 0,
-    moveDelay: 110,
+    moveDelay: 150,
   },
 
   ghosts: [
