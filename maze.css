@@ -583,8 +583,8 @@ body {
 }
 
 footer {
-  width: 100px;
-  height: 100px;
-  color: #2121de;
+  width: 10px;
+  height: 10px;
   animation: animate 1s ease-in infinite;
+
 }
