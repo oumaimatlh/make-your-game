@@ -592,6 +592,7 @@ body {
 footer {
   width: 10px;
   height: 10px;
+  /* color: transparent; */
   animation: animate 1s ease-in infinite;
 
 }
