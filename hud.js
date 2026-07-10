@@ -2,9 +2,11 @@ import { state } from "./store.js";
 
 const scoreElement = document.getElementById("score-value");
 const livesElement = document.getElementById("lives-value");
+const timeElement = document.getElementById("time-value");
 
 let prevScore = -1;
 let prevLives = -1;
+let prevTime = -1;
 
 const lifeIconHTML = `
   <span class="life-icon">
@@ -13,6 +15,15 @@ const lifeIconHTML = `
     </svg>
   </span>
 `;
+
+function formatTime(seconds) {
+  const totalSeconds = Math.max(0, Math.ceil(seconds));
+  const minutes = Math.floor(totalSeconds / 60);
+  const secs = totalSeconds % 60;
+  return `${minutes.toString().padStart(2, "0")}:${secs
+    .toString()
+    .padStart(2, "0")}`;
+}
 
 export function renderHUD() {
   if (state.score !== prevScore) {
@@ -24,5 +35,9 @@ export function renderHUD() {
       .map(() => lifeIconHTML)
       .join("");
     prevLives = state.lives;
+  }
+  if (state.timeRemaining !== prevTime) {
+    timeElement.textContent = formatTime(state.timeRemaining);
+    prevTime = state.timeRemaining;
   }
 }

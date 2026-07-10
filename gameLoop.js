@@ -4,6 +4,7 @@ import { ghostRender, ghostUpdate } from "./ghost.js";
 import { renderHUD } from "./hud.js";
 import { state } from "./store.js";
 
+const INITIAL_TIME = 120;
 const startSound = new Audio("./assets/son.mp3");
 startSound.preload = "auto";
 startSound.volume = 0.5;
@@ -11,7 +12,6 @@ const FPS = 60;
 const FRAME_DURATION = 1000 / FPS;
 const MAX_ACCUMULATOR = FRAME_DURATION * 5;
 
-// FPS counter removed
 
 const startScreen = document.getElementById("start-screen");
 const pauseScreen = document.getElementById("pause-screen");
@@ -154,6 +154,7 @@ function resetFullGame() {
   state.lives = 3;
   state.hitDelay = 0;
   state.lastTime = 0;
+  state.timeRemaining = INITIAL_TIME;
 
   restoreMaze();
   rebuildMaze();
@@ -165,6 +166,13 @@ function resetFullGame() {
 
 function update() {
   if (state.status === "gameover" || state.status === "won") return;
+
+  state.timeRemaining = Math.max(0, state.timeRemaining - state.deltaTime);
+  if (state.timeRemaining <= 0) {
+    state.timeRemaining = 0;
+    showGameOver();
+    return;
+  }
 
   if (state.hitDelay > 0) {
     state.hitDelay = Math.max(0, state.hitDelay - state.deltaTime);

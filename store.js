@@ -57,5 +57,6 @@ export var state = {
   hitDelay: 0,
   lastTime: 0,
   deltaTime: 0,
+  timeRemaining: 120,
   status: "start",
 };

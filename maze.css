@@ -220,6 +220,21 @@ body {
   gap: 8px;
 }
 
+/* Score */
+.score-block {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Lives */
+#lives-block {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Labels */
 .hud-label {
   font-family: system-ui, sans-serif;
   font-size: 10px;
@@ -430,7 +445,11 @@ footer {
   .hud-value {
     font-size: 15px;
   }
-  #maze {
-    max-height: calc(100dvh - 75px);
-  }
+}
+
+footer {
+  width: 10px;
+  height: 10px;
+  animation: animate 1s ease-in infinite;
+
 }
