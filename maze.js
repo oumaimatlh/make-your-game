@@ -1,6 +1,5 @@
 // Architecture :THE MAZE PAC MAN
 
-//Murs (walls) && PacMan && Paths &&& Dots && Fantomes(ghosts)
 // 1 = mur, 0 = chemin, 2 = point (pac-dot)
 export const initialMaze = [
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -27,7 +26,7 @@ export const initialMaze = [
 export const maze = initialMaze.map((row) => [...row]);
 
 export function restoreMaze() {
-  maze.splice(0, maze.length, ...initialMaze.map((row) => [...row]));
+  maze.splice(0, maze.length, ...initialMaze.map((row) => [...row])); 
 }
 
 export function rebuildMaze() {
@@ -43,11 +42,14 @@ export function rebuildMaze() {
 
       if (cell === 1) {
         div.classList.add("wall");
+
       } else if (cell === 2) {
         div.classList.add("path");
         div.classList.add("pacman-cell");
+
       } else if (cell === 7) {
         div.classList.add("door");
+        
       } else if (cell === 6) {
         div.classList.add("path");
         div.classList.add("dot-cell");

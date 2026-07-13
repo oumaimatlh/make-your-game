@@ -5,25 +5,32 @@ import { renderHUD } from "./hud.js";
 import { state } from "./store.js";
 
 const INITIAL_TIME = 120;
+
 const startSound = new Audio("./assets/son.mp3");
 startSound.preload = "auto";
 startSound.volume = 0.5;
+
 const FPS = 60;
 const FRAME_DURATION = 1000 / FPS;
 const MAX_ACCUMULATOR = FRAME_DURATION * 5;
 
 
 const startScreen = document.getElementById("start-screen");
-const pauseScreen = document.getElementById("pause-screen");
 const playBtn = document.getElementById("play-btn");
-const continueBtn = document.getElementById("continue-btn");
-const restartGameBtn = document.getElementById("restart-game-btn");
-const pauseBtn = document.getElementById("pause-btn");
-const gameOverScreen = document.getElementById("gameover-screen");
-const winScreen = document.getElementById("win-screen");
-const restartBtn = document.getElementById("restart-btn");
-const playAgainBtn = document.getElementById("play-again-btn");
+playBtn.addEventListener("click", () => {
+  state.status = "playing";
+  startScreen.classList.add("hidden");
+  pauseBtn.classList.remove("hidden");
+  startSound.currentTime = 0;
+  startSound.play().catch(() => {});
+});
 
+
+const pauseScreen = document.getElementById("pause-screen");
+const pauseBtn = document.getElementById("pause-btn");
+const continueBtn = document.getElementById("continue-btn");
+pauseBtn.addEventListener("click", () => togglePause());
+continueBtn.addEventListener("click", () => togglePause());
 function togglePause() {
   if (state.status === "playing") {
     state.status = "paused";
@@ -36,15 +43,32 @@ function togglePause() {
   }
 }
 
-playBtn.addEventListener("click", () => {
-  state.status = "playing";
-  startScreen.classList.add("hidden");
-  pauseBtn.classList.remove("hidden");
+window.addEventListener("keydown", (event) => {
+  if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key)) {
+    event.preventDefault();
+    if (state.status === "playing") {
+      state.pacMan.direction = event.key;
+      state.pacMan.moveTimer = state.pacMan.moveDelay;
+    }
+  }
 
-  startSound.currentTime = 0;
-  startSound.play().catch(() => {});
+  if (event.key === "Escape") {
+    event.preventDefault();
+    if (state.status === "playing" || state.status === "paused") {
+      togglePause();
+    }
+  }
 });
-continueBtn.addEventListener("click", () => togglePause());
+
+//--------------------------------------//
+
+const restartGameBtn = document.getElementById("restart-game-btn");
+const gameOverScreen = document.getElementById("gameover-screen");
+const winScreen = document.getElementById("win-screen");
+const restartBtn = document.getElementById("restart-btn");
+const playAgainBtn = document.getElementById("play-again-btn");
+
+
 restartGameBtn.addEventListener("click", () => {
   pauseScreen.classList.add("hidden");
   pauseBtn.classList.remove("hidden");
@@ -53,7 +77,7 @@ restartGameBtn.addEventListener("click", () => {
   resetFullGame();
   state.status = "playing";
 });
-pauseBtn.addEventListener("click", () => togglePause());
+
 restartBtn.addEventListener("click", () => {
   hideGameOver();
   hideWin();
@@ -67,23 +91,6 @@ playAgainBtn.addEventListener("click", () => {
   state.status = "playing";
 });
 
-window.addEventListener("keydown", (event) => {
-  if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key)) {
-    event.preventDefault();
-    if (state.status === "playing") {
-      state.pacMan.direction = event.key;
-      // force immediate movement on key press for responsiveness
-      state.pacMan.moveTimer = state.pacMan.moveDelay;
-    }
-  }
-
-  if (event.key === "Escape") {
-    event.preventDefault();
-    if (state.status === "playing" || state.status === "paused") {
-      togglePause();
-    }
-  }
-});
 
 function showGameOver() {
   state.status = "gameover";
